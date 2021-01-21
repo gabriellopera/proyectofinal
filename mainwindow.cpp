@@ -17,6 +17,11 @@ MainWindow::MainWindow(QWidget *parent)
     scene->setSceneRect(0,0,0,0);
     scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
     ui->graphicsView->setScene(scene);
+
+    haley = new meteor();
+    haley->setPos(300,270);
+    scene->addItem(haley);
+
     muros2.append(new muros(760,10,-200,-750));
     muros2.append(new muros(760,10,-200,-230));
     muros2.append(new muros(10,510,-200,-240));
