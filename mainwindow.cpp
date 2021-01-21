@@ -12,13 +12,15 @@ MainWindow::MainWindow(QWidget *parent)
 //    ancho=Desktop.width();
 //    alto=Desktop.height();
 
+
     scene = new QGraphicsScene(x,y,ancho,alto);
     scene->setSceneRect(0,0,0,0);
+    scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
     ui->graphicsView->setScene(scene);
-    muros2.append(new muros(760,20,-200,-750));
-    muros2.append(new muros(760,20,-200,-230));
-    muros2.append(new muros(20,500,-200,-250));
-    muros2.append(new muros(20,500,-940,-250));
+    muros2.append(new muros(760,10,-200,-750));
+    muros2.append(new muros(760,10,-200,-230));
+    muros2.append(new muros(10,510,-200,-240));
+    muros2.append(new muros(10,510,-950,-240));
 //
 
 
