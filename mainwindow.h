@@ -15,7 +15,7 @@
 #include <QRect>
 #include <QDesktopWidget>
 #include <QDebug>
-
+#include <ctime>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -40,8 +40,8 @@ private:
     Ui::MainWindow *ui;
     QTimer *timer;
     QGraphicsScene *scene;
-    float dt; float x,y,alto,ancho;
-    int h_limit;
+    float dt; float x,y,alto,ancho,t;
+    int h_limit,tm;
     int v_limit;
     void keyPressEvent(QKeyEvent *event);
     muros *muro;

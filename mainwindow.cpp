@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent)
     h_limit = 900;
     v_limit = 450;
 
-
     QRect Desktop = QApplication::desktop()->screenGeometry();
     x=Desktop.x();
     y=Desktop.y();
@@ -56,6 +55,10 @@ void MainWindow::actualizar()
         bars.at(i)->actualizar(v_limit);
         borderCollision(bars.at(i)->getEsf());
     }
+    clock_t t;
+    t=clock();
+    tm=60-(int(t)/CLOCKS_PER_SEC);
+    ui->lcdNumber->display(tm);
 }
 
 void MainWindow::borderCollision(mete *b)
