@@ -5,12 +5,12 @@ meteor::meteor():escala(0.8)
     float posx,posy,velx,vely,mass,r,K,e;
     posx = 32;
     posy = 150;
-    r = 20;
+    r = 15;
     mass = 50;
     velx = 0;
     vely = 0;
     K = 0;
-    e = 0.9;
+    e = 2;
     esf = new mete(posx,posy,velx,vely,mass,r,K,e);
 
 }
@@ -27,7 +27,7 @@ QRectF meteor::boundingRect() const
 
 void meteor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->setBrush(Qt::blue);
+    painter->setBrush(Qt::green);
     painter->drawEllipse(boundingRect());
 }
 

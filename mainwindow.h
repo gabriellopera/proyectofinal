@@ -44,7 +44,7 @@ private:
     int h_limit;
     int v_limit;
     void keyPressEvent(QKeyEvent *event);
-
+    muros *muro;
     void borderCollision(mete *b);
     QList<meteor *> bars;
 };
