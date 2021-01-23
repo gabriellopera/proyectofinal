@@ -11,11 +11,13 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    mete.cpp \
     meteor.cpp \
     muros.cpp
 
 HEADERS += \
     mainwindow.h \
+    mete.h \
     meteor.h \
     muros.h
 

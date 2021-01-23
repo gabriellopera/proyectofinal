@@ -1,105 +1,50 @@
 #include "meteor.h"
 
-#include <QDebug>
-
-meteor::meteor(int r_, int x, int y)
+meteor::meteor():escala(0.8)
 {
-    r = r_;
-    posx = x;
-    posy = y;
-    setPos(posx,posy);
-}
-meteor::meteor(QObject *parent) : QObject(parent)
-{
-    timer =new QTimer();
-    filas =25;
-    columnas =0;
-    pixmap = new QPixmap(":/images/fuego.png");
-    //dimensiones imagen
-    ancho = 66.33;
-    alto = 30;
-    timer->start(100);
-    connect(timer,&QTimer::timeout, this,&meteor::Actualizacion);
-    setPos(250,250);
+    float posx,posy,velx,vely,mass,r,K,e;
+    posx = 32;
+    posy = 150;
+    r = 20;
+    mass = 50;
+    velx = 0;
+    vely = 0;
+    K = 0;
+    e = 0.9;
+    esf = new mete(posx,posy,velx,vely,mass,r,K,e);
 
 }
 
-void meteor::Actualizacion()
+meteor::~meteor()
 {
-    columnas += 66.33;
-    if(columnas >=132.66){
-        columnas =0;
-    }
-    filas += 30;
-    if(filas >=145){
-        filas =25;
-    }
-    this->update(-ancho/2,-alto/2,ancho,alto);
+    delete esf;
 }
 
 QRectF meteor::boundingRect() const
 {
-    return QRectF(-ancho/2,-alto/2,ancho,alto);
+    return QRectF(-1*escala*esf->getR(),-1*escala*esf->getR(),2*escala*esf->getR(),2*escala*esf->getR());
 }
 
 void meteor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->drawPixmap(-ancho/2, -alto/2,*pixmap,columnas,filas,ancho,alto);
-    //setScale(1);
+    painter->setBrush(Qt::blue);
+    painter->drawEllipse(boundingRect());
 }
 
-int meteor::getR() const
+void meteor::setEscala(float s)
 {
-    return r;
+    escala = s;
 }
 
-void meteor::setR(int value)
+void meteor::actualizar(float v_lim)
 {
-    r = value;
+    esf->actualizar();
+    setPos(esf->getPX(),v_lim-esf->getPY());
 }
 
-int meteor::getPosx() const
+mete *meteor::getEsf()
 {
-    return posx;
-}
-
-void meteor::setPosx(int value)
-{
-    posx = value;
-}
-
-int meteor::getPosy() const
-{
-    return posy;
-}
-
-void meteor::setPosy(int value)
-{
-    posy = value;
-}
-
-void meteor::up()
-{
-    posy -= 1*velocidad;
-    setPos(posx, posy);
-}
-
-void meteor::down()
-{
-    posy += 1*velocidad;
-    setPos(posx, posy);
-}
-
-void meteor::left()
-{
-    posx -= 1*velocidad;
-    setPos(posx, posy);
-}
-
-void meteor::right()
-{
-    posx += 1*velocidad;
-    setPos(posx, posy);
+    return esf;
 }
 
 

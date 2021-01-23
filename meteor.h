@@ -1,49 +1,39 @@
-#ifndef METEOR_H
-#define METEOR_H
+#ifndef CUERPOGRAF_H
+#define CUERPOGRAF_H
 
-
+#include <QPainter>
 #include <QObject>
 #include <QGraphicsItem>
+#include <QGraphicsScene>
+#include "mete.h"
+#include <stdlib.h>
+#include <time.h>
 #include <QTimer>
 #include <QPixmap>
-#include <QPainter>
-#include <QGraphicsScene>
 
-class meteor : public QObject, public QGraphicsItem
+class meteor: public QGraphicsItem
 {
-    Q_OBJECT
-    int r;//
-    int posx=20, posy=20;//
-    int velocidad = 10;//
-
 public:
-    explicit meteor(QObject *parent = nullptr);
-    meteor(int r_, int x, int y);//
     QTimer * timer;
     QPixmap *pixmap;
-    int getR() const;
-    void setR(int radio);
-    int getPosx() const;
-    void setPosx(int px);
-    int getPosy() const;
-    void setPosy(int py);
+    meteor();
+    ~meteor();
+    QRectF boundingRect() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,QWidget *widget);
+    void setEscala(float s);
+    void actualizar(float v_lim);
+    mete *getEsf();
 
     float filas, columnas, ancho, alto;
 
-    QRectF boundingRect() const;
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    void up();
-    void down();
-    void left();
-    void right();
-    void move();
-
+private:
+    mete * esf;
+    float escala;
 
 signals:
 
 public slots:
     void Actualizacion();
-
 };
 
-#endif // METEOR_H
+#endif // CUERPOGRAF_H

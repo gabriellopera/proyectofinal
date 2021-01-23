@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <meteor.h>
+#include <mete.h>
+
 #include <QMainWindow>
 #include "muros.h"
 #include <QGraphicsScene>
@@ -27,13 +29,23 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void actualizar();
+
+
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
-    QList<muros *> muros2;
-    QGraphicsScene *scene;
     QTimer *timer;
-    meteor *haley;
+    QGraphicsScene *scene;
+    float dt; float x,y,alto,ancho;
+    int h_limit;
+    int v_limit;
+    void keyPressEvent(QKeyEvent *event);
 
-    float x,y,ancho,alto;
+    void borderCollision(mete *b);
+    QList<meteor *> bars;
 };
 #endif // MAINWINDOW_H
