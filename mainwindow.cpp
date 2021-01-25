@@ -11,26 +11,16 @@ MainWindow::MainWindow(QWidget *parent)
     h_limit = 800;
     v_limit = 450;
 
-    //    QRect Desktop = QApplication::desktop()->screenGeometry();
-//    x=Desktop.x();
-//    y=Desktop.y();
-//    ancho=Desktop.width();
-//    alto=Desktop.height();
-
-    //scene = new QGraphicsScene(200,100,500,1000);
-    scene = new QGraphicsScene(0,0,0,0);
+    //scene = new QGraphicsScene(0,0,0,0);
     timer = new QTimer(this);
-    //scene = new QGraphicsScene(this);
+    scene = new QGraphicsScene(this);
     scene->setSceneRect(0,0,h_limit,v_limit);
     scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
     ui->graphicsView->setScene(scene);
-    //ui->centralwidget->adjustSize();
-    scene->addRect(scene->sceneRect());
-    //ui->graphicsView->resize(700,1300);
-    //ui->graphicsView->resize(scene->width(),scene->height());
-    //this->resize(ui->graphicsView->width()+0,ui->graphicsView->height()+0);
 
-    connect(timer,SIGNAL(timeout()),this,SLOT(actualizar()));
+    scene->addRect(scene->sceneRect());
+
+
     timer->start(15);
     bars.push_back(new meteor);
     bars.back()->actualizar(v_limit);
@@ -47,12 +37,17 @@ MainWindow::MainWindow(QWidget *parent)
     connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
     timer2->start(10);
 
-    muro2 = new muros(20,20,-70,-60);  //Creo objeto circular
+    muro2 = new muros(x,y,-70,-60);
     scene->addItem(muro2);
 
-    //timer2->stop();  //Para el timer de este objeto
-    connect(timer2,SIGNAL(timeout()),this,SLOT(circular()));
 
+    ui->pushButton_3->hide();
+    ui->pushButton_2->hide();
+    ui->pushButton_4->hide();
+    ui->pushButton_5->hide();
+    ui->textBrowser_4->hide();
+    ui->lcdNumber->hide();
+    ui->graphicsView->hide();
 
 }
 
@@ -79,19 +74,15 @@ void MainWindow::actualizar()
 void MainWindow::borderCollision(mete *b)
 {   int z=5;
     if(b->getPX()<b->getR()){
-        //b->set_vel(-1*b->getE()*b->getVX(),b->getVY(),b->getR(),b->getPY());
         b->set_vel(-1*(0+(rand()%z))*b->getVX(),b->getVY(),b->getR(),b->getPY());
     }
     if(b->getPX()>h_limit-b->getR()){
-        //b->set_vel(-1*b->getE()*b->getVX(),b->getVY(),h_limit-b->getR(),b->getPY());
         b->set_vel(-1*(0+(rand()%z))*b->getVX(),b->getVY(),h_limit-b->getR(),b->getPY());
     }
     if(b->getPY()<b->getR()){
-        //b->set_vel(b->getVX(),-1*b->getE()*b->getVY(),b->getPX(),b->getR());
         b->set_vel(b->getVX(),-1*(0+(rand()%z))*b->getVY(),b->getPX(),b->getR());
     }
     if(b->getPY()>v_limit-b->getR()){
-        //b->set_vel(b->getVX(),-1*b->getE()*b->getVY(),b->getPX(),v_limit-b->getR());
         b->set_vel(b->getVX(),-1*(0+(rand()%z))*b->getVY(),b->getPX(),v_limit-b->getR());
     }
 }
@@ -131,7 +122,7 @@ void MainWindow::pendulo()
 }
 
 void MainWindow::circular()
-{
+{   i=0.01745329252;
     int r=70;
     x=-1*r*cos(i*2);
     y=-1*r*sin(i*2);
@@ -140,6 +131,20 @@ void MainWindow::circular()
 
 void MainWindow::on_pushButton_clicked()
 {
+    ui->textBrowser_4->show();
+    ui->textBrowser_5->hide();
+    ui->graphicsView->show();
+    ui->pushButton_3->show();
+    ui->pushButton->hide();
+    ui->pushButton_4->show();
+    ui->pushButton_5->show();
+    ui->lcdNumber->show();
+    connect(timer,SIGNAL(timeout()),this,SLOT(actualizar()));
+    connect(timer2,SIGNAL(timeout()),this,SLOT(circular()));
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
 
 }
 
@@ -147,4 +152,28 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_pushButton_5_clicked()
 {
 
+}
+
+
+void MainWindow::on_pushButton_3_clicked()
+{
+
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+
+}
+
+void MainWindow::on_pushButton_6_clicked()
+{
+    timer->start(15);
+    timer2->start(10);
+
+}
+
+void MainWindow::on_pushButton_7_clicked()
+{
+    timer->stop();
+    timer2->stop();
 }
