@@ -2,7 +2,12 @@
     <qresource prefix="/">
         <file>images/universo2.jpg</file>
         <file>images/fuego.png</file>
-        <file>images/planet.png</file>
+        <file>images/COPIA.jpg</file>
+        <file>images/load.jpg</file>
+        <file>images/save.jpg</file>
         <file>images/start.jpg</file>
+        <file>images/start2.jpg</file>
+        <file>images/time.jpg</file>
+        <file>images/space.jpg</file>
     </qresource>
 </RCC>

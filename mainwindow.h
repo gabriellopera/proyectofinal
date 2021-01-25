@@ -38,7 +38,7 @@ public slots:
 private slots:
     void on_pushButton_clicked();
     void pendulo();
-
+    void circular();
     void on_pushButton_5_clicked();
 
 private:
@@ -55,11 +55,11 @@ private:
     double radio2_pend=45;
     double magnitud;
 
-    float dt; float x,y,alto,ancho,te;
+    float dt; float x,y,alto,ancho,te,i;
     int h_limit,tm;
     int v_limit;
     void keyPressEvent(QKeyEvent *event);
-    muros *muro;
+    muros *muro, *muro2;
     void borderCollision(mete *b);
     QList<meteor *> bars;
 };

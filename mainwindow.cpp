@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     srand(time(NULL));
     ui->setupUi(this);
 
-    h_limit = 900;
+    h_limit = 800;
     v_limit = 450;
 
     //    QRect Desktop = QApplication::desktop()->screenGeometry();
@@ -17,8 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
 //    ancho=Desktop.width();
 //    alto=Desktop.height();
 
-    scene = new QGraphicsScene(200,100,500,1000);
-
+    //scene = new QGraphicsScene(200,100,500,1000);
+    scene = new QGraphicsScene(0,0,0,0);
     timer = new QTimer(this);
     //scene = new QGraphicsScene(this);
     scene->setSceneRect(0,0,h_limit,v_limit);
@@ -46,6 +46,12 @@ MainWindow::MainWindow(QWidget *parent)
     magnitud = sqrt(pow(x1_pend - x2_pend, 2)+ pow(y1_pend - y2_pend, 2));
     connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
     timer2->start(10);
+
+    muro2 = new muros(20,20,-70,-60);  //Creo objeto circular
+    scene->addItem(muro2);
+
+    //timer2->stop();  //Para el timer de este objeto
+    connect(timer2,SIGNAL(timeout()),this,SLOT(circular()));
 
 
 }
@@ -110,18 +116,26 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 void MainWindow::pendulo()
 {
 
-    double angulo = asin((x1_pend ) / magnitud); //hallo el valor del teta (posicion) inicial en coordenadas polares
-    double a_x = -G * sin(angulo); //Determino valor de la aceleracion en el eje x
-    static double vx = 0;// velocidad incial en x es cero
-    vx += a_x * tiempo;// velocidad en x
-    static double w = 0; //Velocidad angular inicia en cero
-    w = vx / magnitud; //Hallo la velocidad angular
-    double ace_angulo = w / tiempo; //aceleracion en coordenadas polares
-    angulo = angulo + w * tiempo  + (ace_angulo / 2 ) * tiempo * tiempo; //posicion en coordenadas polares
-    x1_pend = magnitud * sin(angulo); //posicion en x segun la magnitud de la velocidad y el cuadrante en el que estemos
-    y1_pend = magnitud * cos(angulo); //posicion en y segun la magnitud de la velocidad y el cuadrante en el que estemos
-    pend->setPos(x1_pend - 200, y1_pend); //Mostramos la posicion del objeto
+    double angulo = asin((x1_pend ) / magnitud);
+    double a_x = -G * sin(angulo);
+    static double vx = 0;
+    vx += a_x * tiempo;
+    static double w = 0;
+    w = vx / magnitud;
+    double ace_angulo = w / tiempo;
+    angulo = angulo + w * tiempo  + (ace_angulo / 2 ) * tiempo * tiempo;
+    x1_pend = magnitud * sin(angulo);
+    y1_pend = magnitud * cos(angulo);
+    pend->setPos(x1_pend - 200, y1_pend);
 
+}
+
+void MainWindow::circular()
+{
+    int r=70;
+    x=-1*r*cos(i*2);
+    y=-1*r*sin(i*2);
+    muro2->setPos(x+300,y+100);
 }
 
 void MainWindow::on_pushButton_clicked()
