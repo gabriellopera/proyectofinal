@@ -12,7 +12,7 @@ mete::mete(float posX_, float posY_, float velX_, float velY_, float masa_, floa
     VY = velY_; //vel en y
     AX = 0; //acel en x
     AY = 0; //acel en y
-    G = 4; //gravedad
+    G = 10; //gravedad
     K = K_; //Resistencia del aire
     e = e_; //Coeficiente de restitucion
     V = 0; //vector de velocidad

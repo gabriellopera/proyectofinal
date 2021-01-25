@@ -3,5 +3,6 @@
         <file>images/universo2.jpg</file>
         <file>images/fuego.png</file>
         <file>images/planet.png</file>
+        <file>images/start.jpg</file>
     </qresource>
 </RCC>

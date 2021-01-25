@@ -10,7 +10,7 @@ meteor::meteor():escala(0.8)
     velx = 0;
     vely = 0;
     K = 0;
-    e = 2;
+    e = 0+(rand()%3);
     esf = new mete(posx,posy,velx,vely,mass,r,K,e);
 
 }

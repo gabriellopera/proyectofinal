@@ -3,7 +3,8 @@
 
 #include <meteor.h>
 #include <mete.h>
-
+#define tiempo 0.1
+#define G 10
 #include <QMainWindow>
 #include "muros.h"
 #include <QGraphicsScene>
@@ -16,6 +17,7 @@
 #include <QDesktopWidget>
 #include <QDebug>
 #include <ctime>
+#include <math.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,12 +37,25 @@ public slots:
 
 private slots:
     void on_pushButton_clicked();
+    void pendulo();
+
+    void on_pushButton_5_clicked();
 
 private:
     Ui::MainWindow *ui;
-    QTimer *timer;
+    QTimer *timer, *timer2, *timer3;
     QGraphicsScene *scene;
-    float dt; float x,y,alto,ancho,t;
+    QGraphicsEllipseItem *pend;
+    QPen pen;
+    double x1_pend=200;
+    double x2_pend=0;
+    double y1_pend=0;
+    double y2_pend=0;
+    double radio1_pend=45;
+    double radio2_pend=45;
+    double magnitud;
+
+    float dt; float x,y,alto,ancho,te;
     int h_limit,tm;
     int v_limit;
     void keyPressEvent(QKeyEvent *event);
