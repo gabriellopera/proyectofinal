@@ -18,6 +18,7 @@
 #include <QDebug>
 #include <ctime>
 #include <math.h>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -51,26 +52,29 @@ private slots:
 
     void on_pushButton_7_clicked();
 
+    void on_pushButton_8_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer *timer, *timer2, *timer3;
     QGraphicsScene *scene;
-    QGraphicsEllipseItem *pend;
+    QGraphicsEllipseItem *pend,*pend2,*negro;
+    QString name;
     QPen pen;
-    double x1_pend=200;
-    double x2_pend=0;
-    double y1_pend=0;
-    double y2_pend=0;
-    double radio1_pend=45;
-    double radio2_pend=45;
+    double x1_pend;
+    double x2_pend;
+    double y1_pend;
+    double y2_pend;
+    double radio1_pend;
+    double radio2_pend;
     double magnitud;
-
+    QMessageBox message;
     float dt; float x,y,alto,ancho,te,i;
     int h_limit,tm;
     int v_limit;
     void keyPressEvent(QKeyEvent *event);
-    muros *muro, *muro2;
     void borderCollision(mete *b);
     QList<meteor *> bars;
+    QList<muros *> muro;
 };
 #endif // MAINWINDOW_H

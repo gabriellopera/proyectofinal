@@ -27,26 +27,42 @@ MainWindow::MainWindow(QWidget *parent)
     scene->addItem(bars.back());
 
 
-    muro = new muros(20,220,-70,-60);
-    scene->addItem(muro);
+    muro.append(new muros(20,170,-70,-60));
+    muro.append(new muros(220,20,-180,-60));
+    muro.append(new muros(220,20,-70,-340));
+    for(auto it=muro.begin();it!=muro.end();it++)
+    {
+        scene->addItem(*it);
+    }
 
     timer2 = new QTimer(this);
     QBrush brush(Qt::yellow);
-    pend = scene->addEllipse(x1_pend+400,  y1_pend+100,radio1_pend, radio2_pend, pen, brush);
+    QBrush brush2(Qt::black);
+    x1_pend=200;
+    x2_pend=0;
+    y1_pend=0;
+    y2_pend=0;
+    radio1_pend=45;
+    radio2_pend=45;
+    pend2 = scene->addEllipse(x1_pend+300,  y1_pend+100,radio1_pend, radio2_pend, pen, brush);
+    pend = scene->addEllipse(x1_pend,  y1_pend,radio1_pend, radio2_pend, pen, brush);
+    negro = scene->addEllipse(10,10,40,40,pen,brush2);
     magnitud = sqrt(pow(x1_pend - x2_pend, 2)+ pow(y1_pend - y2_pend, 2));
     connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
     timer2->start(10);
 
-    muro2 = new muros(x,y,-70,-60);
-    scene->addItem(muro2);
+
 
 
     ui->pushButton_3->hide();
-    ui->pushButton_2->hide();
+    ui->pushButton->hide();
     ui->pushButton_4->hide();
     ui->pushButton_5->hide();
+    ui->pushButton_6->hide();
+    ui->pushButton_7->hide();
     ui->textBrowser_4->hide();
     ui->lcdNumber->hide();
+    ui->lineEdit->hide();
     ui->graphicsView->hide();
 
 }
@@ -85,6 +101,27 @@ void MainWindow::borderCollision(mete *b)
     if(b->getPY()>v_limit-b->getR()){
         b->set_vel(b->getVX(),-1*(0+(rand()%z))*b->getVY(),b->getPX(),v_limit-b->getR());
     }
+    if(bars.back()->collidesWithItem(pend)){
+        b->set_vel(0,0,800,-10);
+
+    }
+    if(bars.back()->collidesWithItem(pend2)){
+        b->set_vel(0,0,800,-10);
+    }
+    if(bars.back()->collidesWithItem(negro)){
+        timer->stop();
+        timer2->stop();
+        message.setText("PASASTE A LA SEGUNDA GALAXIA!!");
+        message.setInformativeText("");
+        message.exec();
+    }
+    for(auto it=muro.begin();it!=muro.end();it++)
+    {
+        if(bars.back()->collidesWithItem(*it)){
+            b->set_vel(0,0,800,-10);
+        }
+    }
+
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -117,7 +154,8 @@ void MainWindow::pendulo()
     angulo = angulo + w * tiempo  + (ace_angulo / 2 ) * tiempo * tiempo;
     x1_pend = magnitud * sin(angulo);
     y1_pend = magnitud * cos(angulo);
-    pend->setPos(x1_pend - 200, y1_pend);
+    pend->setPos(x1_pend, y1_pend);
+    pend2->setPos(x1_pend, y1_pend);
 
 }
 
@@ -126,11 +164,19 @@ void MainWindow::circular()
     int r=70;
     x=-1*r*cos(i*2);
     y=-1*r*sin(i*2);
-    muro2->setPos(x+300,y+100);
+    //muro2->setPos(x+300,y+100);
 }
 
 void MainWindow::on_pushButton_clicked()
 {
+    name=ui->lineEdit->text();
+    if(name==""){
+        message.setText("Ingrese un usuario");
+        message.setInformativeText("");
+        message.exec();
+    }
+    else{
+    name=ui->lineEdit->text();
     ui->textBrowser_4->show();
     ui->textBrowser_5->hide();
     ui->graphicsView->show();
@@ -138,22 +184,22 @@ void MainWindow::on_pushButton_clicked()
     ui->pushButton->hide();
     ui->pushButton_4->show();
     ui->pushButton_5->show();
+    ui->pushButton_6->show();
+    ui->pushButton_7->show();
     ui->lcdNumber->show();
+    ui->lineEdit->hide();
+    ui->pushButton_8->hide();
     connect(timer,SIGNAL(timeout()),this,SLOT(actualizar()));
     connect(timer2,SIGNAL(timeout()),this,SLOT(circular()));
+    }
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
-
+    ui->lineEdit->show();
+    ui->pushButton->show();
+    ui->pushButton_2->hide();
 }
-
-
-void MainWindow::on_pushButton_5_clicked()
-{
-
-}
-
 
 void MainWindow::on_pushButton_3_clicked()
 {
@@ -161,6 +207,11 @@ void MainWindow::on_pushButton_3_clicked()
 }
 
 void MainWindow::on_pushButton_4_clicked()
+{
+
+}
+
+void MainWindow::on_pushButton_5_clicked()
 {
 
 }
@@ -176,4 +227,9 @@ void MainWindow::on_pushButton_7_clicked()
 {
     timer->stop();
     timer2->stop();
+}
+
+void MainWindow::on_pushButton_8_clicked()
+{
+
 }
