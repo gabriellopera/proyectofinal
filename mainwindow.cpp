@@ -47,11 +47,12 @@ MainWindow::MainWindow(QWidget *parent)
     pend2 = scene->addEllipse(x1_pend+300,  y1_pend+100,radio1_pend, radio2_pend, pen, brush);
     pend = scene->addEllipse(x1_pend,  y1_pend,radio1_pend, radio2_pend, pen, brush);
     negro = scene->addEllipse(10,10,40,40,pen,brush2);
+    negro = scene->addEllipse(x,y,40,40,pen,brush2);
     magnitud = sqrt(pow(x1_pend - x2_pend, 2)+ pow(y1_pend - y2_pend, 2));
     connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
     timer2->start(10);
 
-
+    rad =0.01745329252;
 
 
     ui->pushButton_3->hide();
@@ -160,20 +161,23 @@ void MainWindow::pendulo()
 }
 
 void MainWindow::circular()
-{   i=0.01745329252;
+{   i+=rad;
     int r=70;
     x=-1*r*cos(i*2);
     y=-1*r*sin(i*2);
-    //muro2->setPos(x+300,y+100);
+
 }
 
 void MainWindow::on_pushButton_clicked()
 {
     name=ui->lineEdit->text();
     if(name==""){
-        message.setText("Ingrese un usuario");
+        message.setText("INGRESE UN USUARIO");
         message.setInformativeText("");
         message.exec();
+    }
+    else if (1) {
+
     }
     else{
     name=ui->lineEdit->text();

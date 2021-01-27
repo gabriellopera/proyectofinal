@@ -58,8 +58,8 @@ private:
     Ui::MainWindow *ui;
     QTimer *timer, *timer2, *timer3;
     QGraphicsScene *scene;
-    QGraphicsEllipseItem *pend,*pend2,*negro;
-    QString name;
+    QGraphicsEllipseItem *pend,*pend2,*negro,circle;
+    QString name,name2;
     QPen pen;
     double x1_pend;
     double x2_pend;
@@ -69,7 +69,7 @@ private:
     double radio2_pend;
     double magnitud;
     QMessageBox message;
-    float dt; float x,y,alto,ancho,te,i;
+    float dt; float x,y,alto,ancho,te,i,rad;
     int h_limit,tm;
     int v_limit;
     void keyPressEvent(QKeyEvent *event);
