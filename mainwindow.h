@@ -19,6 +19,14 @@
 #include <ctime>
 #include <math.h>
 #include <QMessageBox>
+#include <string.h>
+#include <QString>
+#include <string>
+#include<conio.h>
+#include <fstream>
+#include <iostream>
+
+using namespace std;
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -34,7 +42,7 @@ public:
 
 public slots:
     void actualizar();
-
+    void crono();
 
 private slots:
     void on_pushButton_clicked();
@@ -54,6 +62,10 @@ private slots:
 
     void on_pushButton_8_clicked();
 
+    void on_pushButton_9_clicked();
+
+    void on_pushButton_10_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer *timer, *timer2, *timer3;
@@ -71,7 +83,7 @@ private:
     QMessageBox message;
     float dt; float x,y,alto,ancho,te,i,rad;
     int h_limit,tm;
-    int v_limit;
+    int v_limit, cronometro=0;
     void keyPressEvent(QKeyEvent *event);
     void borderCollision(mete *b);
     QList<meteor *> bars;

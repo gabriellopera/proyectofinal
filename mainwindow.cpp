@@ -54,6 +54,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     rad =0.01745329252;
 
+    timer3 = new QTimer(this);
+    timer3->start(1000);
+
 
     ui->pushButton_3->hide();
     ui->pushButton->hide();
@@ -61,10 +64,15 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_5->hide();
     ui->pushButton_6->hide();
     ui->pushButton_7->hide();
+    ui->pushButton_9->hide();
+    ui->pushButton_10->hide();
     ui->textBrowser_4->hide();
     ui->lcdNumber->hide();
     ui->lineEdit->hide();
+    ui->lineEdit_2->hide();
     ui->graphicsView->hide();
+    ui->textBrowser_6->hide();
+    ui->textBrowser_7->hide();
 
 }
 
@@ -72,6 +80,7 @@ MainWindow::~MainWindow()
 {
     delete timer;
     delete timer2;
+    delete timer3;
     delete scene;
     delete ui;
 }
@@ -82,10 +91,18 @@ void MainWindow::actualizar()
         bars.at(i)->actualizar(v_limit);
         borderCollision(bars.at(i)->getEsf());
     }
-    clock_t te;
-    te=clock();
-    tm=60-(int(te)/CLOCKS_PER_SEC);
-    ui->lcdNumber->display(tm);
+//    clock_t te;
+//    te=clock();
+//    tm=60-(int(te)/CLOCKS_PER_SEC);
+    //ui->lcdNumber->display(tm);
+
+}
+
+void MainWindow::crono()
+{   int cronometro2=60;
+    cronometro+=1;
+    cronometro2-=cronometro;
+    ui->lcdNumber->display(cronometro2);
 }
 
 void MainWindow::borderCollision(mete *b)
@@ -168,7 +185,7 @@ void MainWindow::circular()
 
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_clicked() //start
 {
     name=ui->lineEdit->text();
     if(name==""){
@@ -176,9 +193,7 @@ void MainWindow::on_pushButton_clicked()
         message.setInformativeText("");
         message.exec();
     }
-    else if (1) {
 
-    }
     else{
     name=ui->lineEdit->text();
     ui->textBrowser_4->show();
@@ -193,24 +208,47 @@ void MainWindow::on_pushButton_clicked()
     ui->lcdNumber->show();
     ui->lineEdit->hide();
     ui->pushButton_8->hide();
+    ui->pushButton_10->hide();
+    ui->pushButton_9->hide();
+    ui->lineEdit_2->hide();
+    ui->textBrowser_6->hide();
+    ui->textBrowser_7->hide();
     connect(timer,SIGNAL(timeout()),this,SLOT(actualizar()));
     connect(timer2,SIGNAL(timeout()),this,SLOT(circular()));
+    connect(timer3,SIGNAL(timeout()),this,SLOT(crono()));
+
     }
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_pushButton_2_clicked() //sig in
 {
     ui->lineEdit->show();
     ui->pushButton->show();
     ui->pushButton_2->hide();
+    ui->pushButton_9->show();
+    ui->textBrowser_6->show();
 }
 
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::on_pushButton_3_clicked() //save
 {
+    mete * b = bars.at(0)->getEsf();
+
+    //string posicionx, posiciony, galaxia, seg, intentos;
+    ifstream archivo;
+    archivo.open("guardar.txt",ios::out| ios::app);
+    archivo.close();
+    //archivo.open("guardar.txt");
+    //while(!archivo.eof())
+    //{
+        ofstream Fichero;
+        Fichero.open("guardar.txt",ios::out| ios::app);
+        Fichero<<name.toStdString()<<" "<<b->getPX()<<" "<<b->getPY()<<" "<<tm<<endl;
+        Fichero.close();
+    //}
 
 }
 
-void MainWindow::on_pushButton_4_clicked()
+void MainWindow::on_pushButton_4_clicked() //load
 {
 
 }
@@ -220,20 +258,38 @@ void MainWindow::on_pushButton_5_clicked()
 
 }
 
-void MainWindow::on_pushButton_6_clicked()
+void MainWindow::on_pushButton_6_clicked() //play
 {
     timer->start(15);
     timer2->start(10);
+    timer3->start(1000);
 
 }
 
-void MainWindow::on_pushButton_7_clicked()
+void MainWindow::on_pushButton_7_clicked() //stop
 {
     timer->stop();
     timer2->stop();
+    timer3->stop();
 }
 
 void MainWindow::on_pushButton_8_clicked()
 {
 
+}
+
+void MainWindow::on_pushButton_9_clicked() //multiplayer
+{
+    ui->pushButton_10->show();
+    ui->pushButton_9->hide();
+    ui->textBrowser_7->show();
+    ui->lineEdit_2->show();
+}
+
+void MainWindow::on_pushButton_10_clicked() //single
+{
+    ui->pushButton_10->hide();
+    ui->pushButton_9->show();
+    ui->textBrowser_7->hide();
+    ui->lineEdit_2->hide();
 }
