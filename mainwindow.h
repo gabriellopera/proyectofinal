@@ -25,6 +25,8 @@
 #include<conio.h>
 #include <fstream>
 #include <iostream>
+#include <stdio.h>
+#include <windows.h>
 
 using namespace std;
 
@@ -72,15 +74,15 @@ private:
     Ui::MainWindow *ui;
     QTimer *timer, *timer2, *timer3;
     QGraphicsScene *scene;
-    QGraphicsEllipseItem *pend,*pend2,*negro,*circle;
+    QGraphicsEllipseItem *pend,*pend2,*negro,*circle,*circle2;
     QString name,name2;
     QPen pen;
     double x1_pend=200,x2_pend=0, y1_pend=0, y2_pend=0, radio1_pend=45, radio2_pend=45, magnitud;
-    double posicionX=0, posicionY=0, velocidadX=-3;
+    double posicionX=0, posicionY=0, velocidadX=-7,velocidad2X=8,posicion2X=0, posicion2Y=0;
     QMessageBox message;
     float dt; float x,y,alto,ancho,te,i,rad;float acum=0;
-    int h_limit,tm;
-    int v_limit, cronometro=60;
+    int h_limit,tm,bandera=0;
+    int v_limit, cronometro=60, level=1;
     void keyPressEvent(QKeyEvent *event);
     void borderCollision(mete *b);
     QList<meteor *> bars;
