@@ -47,7 +47,7 @@ public slots:
 private slots:
     void on_pushButton_clicked();
     void pendulo();
-    void circular();
+    void senoidal();
     void on_pushButton_5_clicked();
 
     void on_pushButton_2_clicked();
@@ -66,24 +66,21 @@ private slots:
 
     void on_pushButton_10_clicked();
 
+    void on_pushButton_11_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer *timer, *timer2, *timer3;
     QGraphicsScene *scene;
-    QGraphicsEllipseItem *pend,*pend2,*negro,circle;
+    QGraphicsEllipseItem *pend,*pend2,*negro,*circle;
     QString name,name2;
     QPen pen;
-    double x1_pend;
-    double x2_pend;
-    double y1_pend;
-    double y2_pend;
-    double radio1_pend;
-    double radio2_pend;
-    double magnitud;
+    double x1_pend=200,x2_pend=0, y1_pend=0, y2_pend=0, radio1_pend=45, radio2_pend=45, magnitud;
+    double posicionX=0, posicionY=0, velocidadX=-3;
     QMessageBox message;
-    float dt; float x,y,alto,ancho,te,i,rad;
+    float dt; float x,y,alto,ancho,te,i,rad;float acum=0;
     int h_limit,tm;
-    int v_limit, cronometro=0;
+    int v_limit, cronometro=60;
     void keyPressEvent(QKeyEvent *event);
     void borderCollision(mete *b);
     QList<meteor *> bars;

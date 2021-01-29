@@ -3,7 +3,7 @@
 meteor::meteor():escala(0.8)
 {
     float posx,posy,velx,vely,mass,r,K,e;
-    posx = 750;// 32;
+    posx = 800;// 32;
     posy = 400;//150;
     r = 15;
     mass = 50;

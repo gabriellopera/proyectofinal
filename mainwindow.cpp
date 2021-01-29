@@ -38,21 +38,15 @@ MainWindow::MainWindow(QWidget *parent)
     timer2 = new QTimer(this);
     QBrush brush(Qt::yellow);
     QBrush brush2(Qt::black);
-    x1_pend=200;
-    x2_pend=0;
-    y1_pend=0;
-    y2_pend=0;
-    radio1_pend=45;
-    radio2_pend=45;
+
     pend2 = scene->addEllipse(x1_pend+300,  y1_pend+100,radio1_pend, radio2_pend, pen, brush);
     pend = scene->addEllipse(x1_pend,  y1_pend,radio1_pend, radio2_pend, pen, brush);
     negro = scene->addEllipse(10,10,40,40,pen,brush2);
-    negro = scene->addEllipse(x,y,40,40,pen,brush2);
+    circle = scene->addEllipse(posicionX,posicionY,40,40,pen,brush2);
     magnitud = sqrt(pow(x1_pend - x2_pend, 2)+ pow(y1_pend - y2_pend, 2));
-    connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
     timer2->start(10);
 
-    rad =0.01745329252;
+
 
     timer3 = new QTimer(this);
     timer3->start(1000);
@@ -66,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_7->hide();
     ui->pushButton_9->hide();
     ui->pushButton_10->hide();
+    ui->pushButton_11->hide();
     ui->textBrowser_4->hide();
     ui->lcdNumber->hide();
     ui->lineEdit->hide();
@@ -99,10 +94,9 @@ void MainWindow::actualizar()
 }
 
 void MainWindow::crono()
-{   int cronometro2=60;
-    cronometro+=1;
-    cronometro2-=cronometro;
-    ui->lcdNumber->display(cronometro2);
+{
+    cronometro-=1;
+    ui->lcdNumber->display(cronometro);
 }
 
 void MainWindow::borderCollision(mete *b)
@@ -123,12 +117,21 @@ void MainWindow::borderCollision(mete *b)
         b->set_vel(0,0,800,-10);
 
     }
+    if(posicionX>h_limit){
+        velocidadX=3;
+    }
+    if(posicionX<0){
+        velocidadX=3;
+
+    }
+
     if(bars.back()->collidesWithItem(pend2)){
         b->set_vel(0,0,800,-10);
     }
     if(bars.back()->collidesWithItem(negro)){
         timer->stop();
         timer2->stop();
+        timer3->stop();
         message.setText("PASASTE A LA SEGUNDA GALAXIA!!");
         message.setInformativeText("");
         message.exec();
@@ -177,11 +180,13 @@ void MainWindow::pendulo()
 
 }
 
-void MainWindow::circular()
-{   i+=rad;
-    int r=70;
-    x=-1*r*cos(i*2);
-    y=-1*r*sin(i*2);
+void MainWindow::senoidal()
+{
+    acum+=0.01;
+    posicionX = posicionX - velocidadX*tiempo;
+    posicionY= 3*sin(2*3.1415*acum/2)+posicionY;
+    circle->setPos(posicionX+200,posicionY+100);
+
 
 }
 
@@ -203,8 +208,8 @@ void MainWindow::on_pushButton_clicked() //start
     ui->pushButton->hide();
     ui->pushButton_4->show();
     ui->pushButton_5->show();
-    ui->pushButton_6->show();
     ui->pushButton_7->show();
+    ui->pushButton_11->show();
     ui->lcdNumber->show();
     ui->lineEdit->hide();
     ui->pushButton_8->hide();
@@ -214,9 +219,9 @@ void MainWindow::on_pushButton_clicked() //start
     ui->textBrowser_6->hide();
     ui->textBrowser_7->hide();
     connect(timer,SIGNAL(timeout()),this,SLOT(actualizar()));
-    connect(timer2,SIGNAL(timeout()),this,SLOT(circular()));
+    connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
     connect(timer3,SIGNAL(timeout()),this,SLOT(crono()));
-
+    connect(timer2,SIGNAL(timeout()),this,SLOT(senoidal()));
     }
 }
 
@@ -232,19 +237,16 @@ void MainWindow::on_pushButton_2_clicked() //sig in
 void MainWindow::on_pushButton_3_clicked() //save
 {
     mete * b = bars.at(0)->getEsf();
+    string nomo2=name.toStdString();
+    string nomo="C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/partidas/";
+    nomo.append(nomo2);
+    nomo.append(".txt");
 
-    //string posicionx, posiciony, galaxia, seg, intentos;
-    ifstream archivo;
-    archivo.open("guardar.txt",ios::out| ios::app);
-    archivo.close();
-    //archivo.open("guardar.txt");
-    //while(!archivo.eof())
-    //{
-        ofstream Fichero;
-        Fichero.open("guardar.txt",ios::out| ios::app);
-        Fichero<<name.toStdString()<<" "<<b->getPX()<<" "<<b->getPY()<<" "<<tm<<endl;
+       fstream Fichero(nomo);
+        Fichero<<name.toStdString()<<" "<<b->getPX()<<" "<<b->getPY()<<" "<<cronometro<<endl;
+
         Fichero.close();
-    //}
+
 
 }
 
@@ -263,6 +265,8 @@ void MainWindow::on_pushButton_6_clicked() //play
     timer->start(15);
     timer2->start(10);
     timer3->start(1000);
+    ui->pushButton_6->hide();
+    ui->pushButton_7->show();
 
 }
 
@@ -271,6 +275,8 @@ void MainWindow::on_pushButton_7_clicked() //stop
     timer->stop();
     timer2->stop();
     timer3->stop();
+    ui->pushButton_7->hide();
+    ui->pushButton_6->show();
 }
 
 void MainWindow::on_pushButton_8_clicked()
@@ -292,4 +298,10 @@ void MainWindow::on_pushButton_10_clicked() //single
     ui->pushButton_9->show();
     ui->textBrowser_7->hide();
     ui->lineEdit_2->hide();
+}
+
+void MainWindow::on_pushButton_11_clicked()
+{   mete *b = bars.at(0)->getEsf();
+    cronometro=60;
+    b->set_vel(0,0,800,-10);
 }
