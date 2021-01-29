@@ -5,6 +5,7 @@
 #include <mete.h>
 #define tiempo 0.1
 #define G 10
+#define TT 60
 #include <QMainWindow>
 #include "muros.h"
 #include <QGraphicsScene>
@@ -80,9 +81,9 @@ private:
     double x1_pend=200,x2_pend=0, y1_pend=0, y2_pend=0, radio1_pend=45, radio2_pend=45, magnitud;
     double posicionX=0, posicionY=0, velocidadX=-7,velocidad2X=8,posicion2X=0, posicion2Y=0;
     QMessageBox message;
-    float dt; float x,y,alto,ancho,te,i,rad;float acum=0;
-    int h_limit,tm,bandera=0;
-    int v_limit, cronometro=60, level=1;
+    float dt; float x,y,alto,ancho,te,i,rad;float acum=0,acum2=0;
+    int h_limit,tm,bandera=0,multijugador=0;
+    int v_limit, cronometro=60, level=0;
     void keyPressEvent(QKeyEvent *event);
     void borderCollision(mete *b);
     QList<meteor *> bars;

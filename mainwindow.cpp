@@ -44,8 +44,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     pend2 = scene->addEllipse(x1_pend+300,  y1_pend+100,radio1_pend, radio2_pend, pen, brush);
     pend = scene->addEllipse(x1_pend,  y1_pend,radio1_pend, radio2_pend, pen, brush);
-    negro = scene->addEllipse(10,10,40,40,pen,brush2);
-    //negro = scene->addEllipse(750,400,40,40,pen,brush2);
+    //negro = scene->addEllipse(10,10,40,40,pen,brush2);
+    negro = scene->addEllipse(690,10,40,40,pen,brush2);
     circle = scene->addEllipse(posicionX,posicionY,40,40,pen,brush3);
     magnitud = sqrt(pow(x1_pend - x2_pend, 2)+ pow(y1_pend - y2_pend, 2));
     timer2->start(10);
@@ -73,6 +73,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->graphicsView->hide();
     ui->textBrowser_6->hide();
     ui->textBrowser_7->hide();
+    ui->pushButton_12->hide();
+    ui->lcdNumber_2->hide();
 
 }
 
@@ -91,18 +93,13 @@ void MainWindow::actualizar()
         bars.at(i)->actualizar(v_limit);
         borderCollision(bars.at(i)->getEsf());
     }
-//    clock_t te;
-//    te=clock();
-//    tm=60-(int(te)/CLOCKS_PER_SEC);
-    //ui->lcdNumber->display(tm);
-
 }
 
 void MainWindow::crono()
 {
     cronometro-=1;
     ui->lcdNumber->display(cronometro);
-    ui->lcdNumber_2->display(level);
+    ui->lcdNumber_2->display(level+1);
 }
 
 void MainWindow::borderCollision(mete *b)
@@ -141,51 +138,70 @@ void MainWindow::borderCollision(mete *b)
     if(bars.back()->collidesWithItem(circle)){
         b->set_vel(0,0,800,-10);
     }
+    if(bandera==2){
+        if(bars.back()->collidesWithItem(circle2)){
+        b->set_vel(0,0,800,-10);
+        }
+    }
+    if(bandera==3){
+        for(auto it=muro.begin();it!=muro.end();it++)
+        {
+            if(bars.back()->collidesWithItem(*it)){
+                b->set_vel(0,0,800,-10);
+            }
+        }
+    }
+
     if(bars.back()->collidesWithItem(negro)){
+        level+=1;
+        b->set_vel(0,0,800,400);
         timer->stop();
         timer2->stop();
         timer3->stop();
         if(level==1){
-            b->set_vel(0,0,800,400);
             message.setText("PASASTE A LA SEGUNDA GALAXIA!!");
             message.setInformativeText("");
             message.exec();
             bandera=2;
-            level+=1;
-            circle2 = scene->addEllipse(posicion2X,posicion2Y,40,40,pen,brush4);
+            circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
             timer->start(15);
             timer2->start(10);
             timer3->start(1000);
-            level+=1;
         }
         if(level==2){
-            b->set_vel(0,0,800,400);
             message.setText("PASASTE A LA TERCERA GALAXIA!!");
             message.setInformativeText("");
             message.exec();
-            bandera=2;
+            bandera+=1;
+            for(int i=0;i<muro.size();i++)
+            {
+                scene->removeItem(muro.at(i));
+                muro.removeAt(i);
+            }
+            muro.append(new muros(20,170,-70,-60));
+            muro.append(new muros(220,20,-180,-60));
+            muro.append(new muros(220,20,-70,-340));
+            muro.append(new muros(20,170,-600,-120));
+            muro.append(new muros(220,20,-460,-390));
+            muro.append(new muros(220,20,-200,-240));
             for(auto it=muro.begin();it!=muro.end();it++)
             {
-                if(bars.back()->collidesWithItem(*it)){
-                    b->set_vel(0,0,800,-10);
-                }
+                scene->addItem(*it);
             }
             timer->start(15);
             timer2->start(12);
             timer3->start(1000);
-            level+=1;
         }
         if(level==3){
             message.setText("FELICITACIONES, LOGRASTE ESCAPAR DE LAS GALAXIA!!");
             message.setInformativeText("");
             message.exec();
+
         }
     }
     for(auto it=muro.begin();it!=muro.end();it++)
     {
-//        if(bars.back()->collidesWithItem(*it)){
-//            b->set_vel(0,0,800,-10);
-//        }
+
         if(bars.back()->collidesWithItem(*it)){
             b->set_vel(-1*b->getVX(),-1*b->getVY(),b->getPX(),b->getPY());
         }
@@ -236,45 +252,85 @@ void MainWindow::senoidal()
     posicionY= 5*sin(2*3.1415*acum/2)+posicionY;
     circle->setPos(posicionX+150,posicionY+70);
 
-    if(bandera==2){
+    if(bandera==2 || bandera==3){
+        acum2+=0.01;
         posicion2X = posicion2X - velocidad2X*tiempo;
-        posicion2Y= -5*sin(2*3.1415*acum/2)+posicion2Y;
+        posicion2Y= -5*sin(2*3.1415*acum2/2)+posicion2Y;
         circle2->setPos(posicion2X+150,posicion2Y+80);}
 
 }
 
 void MainWindow::on_pushButton_clicked() //start
 {
-    name=ui->lineEdit->text();
-    if(name==""){
-        message.setText("INGRESE UN USUARIO");
-        message.setInformativeText("");
-        message.exec();
-    }
+    if(multijugador==0){
+        name=ui->lineEdit->text();
+        if(name==""){
+            message.setText("INGRESE USUARIO PARA PLAYER 1");
+            message.setInformativeText("");
+            message.exec();
+        }
 
-    else{
-    name=ui->lineEdit->text();
-    ui->textBrowser_4->show();
-    ui->textBrowser_5->hide();
-    ui->graphicsView->show();
-    ui->pushButton_3->show();
-    ui->pushButton->hide();
-    ui->pushButton_4->show();
-    ui->pushButton_5->show();
-    ui->pushButton_7->show();
-    ui->pushButton_11->show();
-    ui->lcdNumber->show();
-    ui->lineEdit->hide();
-    ui->pushButton_8->hide();
-    ui->pushButton_10->hide();
-    ui->pushButton_9->hide();
-    ui->lineEdit_2->hide();
-    ui->textBrowser_6->hide();
-    ui->textBrowser_7->hide();
-    connect(timer,SIGNAL(timeout()),this,SLOT(actualizar()));
-    connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
-    connect(timer3,SIGNAL(timeout()),this,SLOT(crono()));
-    connect(timer2,SIGNAL(timeout()),this,SLOT(senoidal()));
+
+        else{
+            name=ui->lineEdit->text();
+            ui->textBrowser_4->show();
+            ui->textBrowser_5->hide();
+            ui->graphicsView->show();
+            ui->pushButton_3->show();
+            ui->pushButton->hide();
+            ui->pushButton_4->show();
+            ui->pushButton_5->show();
+            ui->pushButton_7->show();
+            ui->pushButton_11->show();
+            ui->lcdNumber->show();
+            ui->lineEdit->hide();
+            ui->pushButton_8->hide();
+            ui->pushButton_10->hide();
+            ui->pushButton_9->hide();
+            ui->lineEdit_2->hide();
+            ui->textBrowser_6->hide();
+            ui->textBrowser_7->hide();
+            ui->pushButton_12->show();
+            ui->lcdNumber_2->show();
+            connect(timer,SIGNAL(timeout()),this,SLOT(actualizar()));
+            connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
+            connect(timer3,SIGNAL(timeout()),this,SLOT(crono()));
+            connect(timer2,SIGNAL(timeout()),this,SLOT(senoidal()));
+        }
+    }
+    if(multijugador==1){
+        name2=ui->lineEdit_2->text();
+        if(name2==""){
+            message.setText("INGRESE USUARIO PARA PLAYER 2");
+            message.setInformativeText("");
+            message.exec();
+        }
+        else{
+            name2=ui->lineEdit_2->text();
+            ui->textBrowser_4->show();
+            ui->textBrowser_5->hide();
+            ui->graphicsView->show();
+            ui->pushButton_3->show();
+            ui->pushButton->hide();
+            ui->pushButton_4->show();
+            ui->pushButton_5->show();
+            ui->pushButton_7->show();
+            ui->pushButton_11->show();
+            ui->lcdNumber->show();
+            ui->lineEdit->hide();
+            ui->pushButton_8->hide();
+            ui->pushButton_10->hide();
+            ui->pushButton_9->hide();
+            ui->lineEdit_2->hide();
+            ui->textBrowser_6->hide();
+            ui->textBrowser_7->hide();
+            ui->pushButton_12->show();
+            ui->lcdNumber_2->show();
+            connect(timer,SIGNAL(timeout()),this,SLOT(actualizar()));
+            connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
+            connect(timer3,SIGNAL(timeout()),this,SLOT(crono()));
+            connect(timer2,SIGNAL(timeout()),this,SLOT(senoidal()));
+        }
     }
 }
 
@@ -343,6 +399,7 @@ void MainWindow::on_pushButton_9_clicked() //multiplayer
     ui->pushButton_9->hide();
     ui->textBrowser_7->show();
     ui->lineEdit_2->show();
+    multijugador=1;
 }
 
 void MainWindow::on_pushButton_10_clicked() //single
@@ -351,10 +408,53 @@ void MainWindow::on_pushButton_10_clicked() //single
     ui->pushButton_9->show();
     ui->textBrowser_7->hide();
     ui->lineEdit_2->hide();
+    multijugador=0;
 }
 
 void MainWindow::on_pushButton_11_clicked()
-{   mete *b = bars.at(0)->getEsf();
-    cronometro=60;
-    b->set_vel(0,0,800,-10);
+{
+    mete *b = bars.at(0)->getEsf();
+    if(level==0){
+        cronometro=TT;
+        b->set_vel(0,0,800,-10);
+        posicionX=0;
+        posicionY=0;
+        acum=0;
+    }
+    if(level==1){
+        bandera=0;
+        delete circle2;
+        cronometro=TT;
+        b->set_vel(0,0,800,-10);
+        posicionX=0;velocidadX=-7;
+        posicionY=0;
+        posicion2X=0;
+        posicion2Y=0;
+        acum=0;acum2=0;level=0;
+    }
+    if(level==2){
+        bandera=0;
+        delete circle2;
+        cronometro=TT;
+        b->set_vel(0,0,800,-10);
+        posicionX=0;velocidadX=-7;
+        posicionY=0;
+        posicion2X=0;
+        posicion2Y=0;
+        acum=0;acum2=0;level=0;
+        for(int i=0;i<muro.size();i++)
+        {
+            scene->removeItem(muro.at(i));
+            muro.removeAt(i);
+        }
+        muro.append(new muros(20,170,-70,-60));
+        muro.append(new muros(220,20,-180,-60));
+        muro.append(new muros(220,20,-70,-340));
+        muro.append(new muros(20,170,-600,-120));
+        muro.append(new muros(220,20,-460,-390));
+        for(auto it=muro.begin();it!=muro.end();it++)
+        {
+            scene->addItem(*it);
+        }
+    }
 }
