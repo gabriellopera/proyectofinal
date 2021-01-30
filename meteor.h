@@ -16,7 +16,7 @@ class meteor: public QGraphicsItem
 public:
     QTimer * timer;
     QPixmap *pixmap;
-    meteor();
+    meteor(int x);
     ~meteor();
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,QWidget *widget);
@@ -27,8 +27,9 @@ public:
     float filas, columnas, ancho, alto;
 
 private:
-    mete * esf;
+    mete * esf, *esf2;
     float escala;
+    int play;
 
 signals:
 

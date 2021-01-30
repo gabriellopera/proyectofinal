@@ -17,6 +17,8 @@ mete::mete(float posX_, float posY_, float velX_, float velY_, float masa_, floa
     e = e_; //Coeficiente de restitucion
     V = 0; //vector de velocidad
     dt = 0.1; //delta tiempo
+
+
 }
 
 mete::~mete()
@@ -36,11 +38,11 @@ void mete::actualizar()
     VY = VY + AY*dt;
 }
 
-
 float mete::getPY() const
 {
     return PY;
 }
+
 
 float mete::getMass() const
 {
@@ -61,6 +63,7 @@ float mete::getVY() const
 {
     return VY;
 }
+
 
 float mete::getE() const
 {

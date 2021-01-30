@@ -43,9 +43,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
 public slots:
     void actualizar();
+    void actualizar2();
     void crono();
+    void crono2();
 
 private slots:
     void on_pushButton_clicked();
@@ -73,7 +76,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QTimer *timer, *timer2, *timer3;
+    QTimer *timer, *timer2, *timer3, *timerP2, *timerCron2;
     QGraphicsScene *scene;
     QGraphicsEllipseItem *pend,*pend2,*negro,*circle,*circle2;
     QString name,name2;
@@ -83,10 +86,13 @@ private:
     QMessageBox message;
     float dt; float x,y,alto,ancho,te,i,rad;float acum=0,acum2=0;
     int h_limit,tm,bandera=0,multijugador=0;
-    int v_limit, cronometro=60, level=0;
+    int v_limit, cronometro=TT, cronometro2=TT, level=0;
+    bool bandP1=false, bandP2=false;
     void keyPressEvent(QKeyEvent *event);
     void borderCollision(mete *b);
+    void borderCollision2(mete *b, mete *c);
     QList<meteor *> bars;
     QList<muros *> muro;
+    meteor *player1, *player2;
 };
 #endif // MAINWINDOW_H

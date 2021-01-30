@@ -25,13 +25,18 @@ public:
     void actualizar();
 
     float getPX() const;
+
     float getPY() const;
+
     float getMass() const;
     float getR() const;
     float getVX() const;
+    ;
     float getVY() const;
+
     float getE() const;
     void set_vel(float vx, float vy, float px, float py);
+
 };
 
 #endif // METE_H
