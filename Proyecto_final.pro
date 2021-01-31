@@ -13,12 +13,14 @@ SOURCES += \
     mainwindow.cpp \
     mete.cpp \
     meteor.cpp \
+    moneda.cpp \
     muros.cpp
 
 HEADERS += \
     mainwindow.h \
     mete.h \
     meteor.h \
+    moneda.h \
     muros.h
 
 FORMS += \

@@ -17,12 +17,17 @@ MainWindow::MainWindow(QWidget *parent)
     scene->setSceneRect(0,0,h_limit,v_limit);
     scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
     ui->graphicsView->setScene(scene);
-
     scene->addRect(scene->sceneRect());
 
 
-
-
+    monedas.append(new moneda(-35,-35,525,360));
+    monedas.append(new moneda(-35,-35,225,200));
+    monedas.append(new moneda(-35,-35,500,140));
+    monedas.append(new moneda(-35,-35,160,40));
+    monedas.append(new moneda(-35,-35,30,360));
+    for(auto it=monedas.begin();it!=monedas.end();it++){
+        scene->addItem(*it);
+    }
 
 
     muro.append(new muros(20,170,-70,-60));
@@ -50,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
     timer = new QTimer(this);
     timer->start(15);
     timer2 = new QTimer(this);
-    timer2->start(10);
+
     timer3 = new QTimer(this);
     timer3->start(1000);
     timerCron2 = new QTimer(this);
@@ -79,6 +84,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lcdNumber_2->hide();
     ui->pushButton_13->hide();
     ui->lcdNumber_3->hide();
+    ui->pushButton_14->hide();
+    ui->horizontalSlider->hide();
 
 }
 
@@ -157,12 +164,23 @@ void MainWindow::borderCollision(mete *b)
     if(player1->collidesWithItem(circle)){
         b->set_vel(0,0,800,-10);
     }
+    for(int i=0;i<monedas.size();i++)
+    {
+        if(player1->collidesWithItem(monedas.at(i))){
+            scene->removeItem(monedas.at(i));
+            monedas.removeAt(i);
+            cronometro+=xTT;
+        }
+    }
     if(bandera==2){
         if(player1->collidesWithItem(circle2)){
-        b->set_vel(0,0,800,-10);
+            b->set_vel(0,0,800,-10);
         }
     }
     if(bandera==3){
+        if(player1->collidesWithItem(circle2)){
+            b->set_vel(0,0,800,-10);
+        }
         for(auto it=muro.begin();it!=muro.end();it++)
         {
             if(player1->collidesWithItem(*it)){
@@ -184,7 +202,7 @@ void MainWindow::borderCollision(mete *b)
                 bandera=2;
                 circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
                 timer->start(15);
-                timer2->start(10);
+                timer2->start(difficulty-1);
                 timer3->start(1000);
             }
             if(level==2){
@@ -208,7 +226,7 @@ void MainWindow::borderCollision(mete *b)
                     scene->addItem(*it);
                 }
                 timer->start(15);
-                timer2->start(12);
+                timer2->start(difficulty-2);
                 timer3->start(1000);
             }
             if(level==3){
@@ -233,6 +251,7 @@ void MainWindow::borderCollision(mete *b)
 void MainWindow::borderCollision2(mete *b, mete *c)
 {   int z=5;QBrush brush4(Qt::red);
     //player1
+    if(multijugador==1){
     if(b->getPX()<b->getR()){
         b->set_vel(-1*(0+(rand()%z))*b->getVX(),b->getVY(),b->getR(),b->getPY());
     }
@@ -342,7 +361,7 @@ void MainWindow::borderCollision2(mete *b, mete *c)
                 bandera=2;
                 circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
                 timer->start(15);
-                timer2->start(10);
+                timer2->start(difficulty-1);
                 timer3->start(1000);
             }
             if(level==2){
@@ -366,7 +385,7 @@ void MainWindow::borderCollision2(mete *b, mete *c)
                     scene->addItem(*it);
                 }
                 timer->start(15);
-                timer2->start(12);
+                timer2->start(difficulty-2);
                 timer3->start(1000);
             }
             if(level==3){
@@ -402,7 +421,7 @@ void MainWindow::borderCollision2(mete *b, mete *c)
                     bandera=2;
                     circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
                     timer->start(15);
-                    timer2->start(10);
+                    timer2->start(difficulty-2);
                     timer3->start(1000);
                     timerP2->start(15);
                     timerCron2->start(1000);
@@ -413,7 +432,7 @@ void MainWindow::borderCollision2(mete *b, mete *c)
 
     }
 
-
+    }
 }
 
 
@@ -421,7 +440,7 @@ void MainWindow::borderCollision2(mete *b, mete *c)
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     mete * b = player1->getEsf();
-    mete * c = player2->getEsf();
+
 
     if(multijugador==0){
         if(event->key() == Qt::Key_D){
@@ -435,7 +454,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         }
     }
     else if(multijugador==1){
-
+        mete * c = player2->getEsf();
 
         if(event->key() == Qt::Key_D){
             b->set_vel(10,b->getVY(),b->getPX(),b->getPY());
@@ -524,8 +543,11 @@ void MainWindow::on_pushButton_clicked() //start
             ui->textBrowser_7->hide();
             ui->pushButton_12->show();
             ui->lcdNumber_2->show();
+            ui->pushButton_14->hide();
+            ui->horizontalSlider->hide();
             player1 = new meteor(1);
             scene->addItem(player1);
+            timer2->start(difficulty);
             connect(timer,SIGNAL(timeout()),this,SLOT(actualizar()));//player1
             connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
             connect(timer3,SIGNAL(timeout()),this,SLOT(crono()));
@@ -562,11 +584,13 @@ void MainWindow::on_pushButton_clicked() //start
             ui->lcdNumber_2->show();
             ui->pushButton_13->show();
             ui->lcdNumber_3->show();
+            ui->pushButton_14->hide();
+            ui->horizontalSlider->hide();
             player1 = new meteor(1);
             scene->addItem(player1);
             player2 = new meteor(2);
             scene->addItem(player2);
-
+            timer2->start(difficulty);
             connect(timer,SIGNAL(timeout()),this,SLOT(actualizar()));
             connect(timerP2,SIGNAL(timeout()),this,SLOT(actualizar2()));
             connect(timerCron2,SIGNAL(timeout()),this,SLOT(crono2()));
@@ -585,6 +609,8 @@ void MainWindow::on_pushButton_2_clicked() //sig in
     ui->pushButton_2->hide();
     ui->pushButton_9->show();
     ui->textBrowser_6->show();
+    ui->pushButton_14->show();
+    ui->horizontalSlider->show();
 }
 
 void MainWindow::on_pushButton_3_clicked() //save
@@ -616,7 +642,7 @@ void MainWindow::on_pushButton_5_clicked()
 void MainWindow::on_pushButton_6_clicked() //play
 {
     timer->start(15);
-    timer2->start(10);
+    timer2->start(difficulty);
     timer3->start(1000);
     timerCron2->start(1000);
     timerP2->start(15);
@@ -705,4 +731,9 @@ void MainWindow::on_pushButton_11_clicked()//reiniciar
             scene->addItem(*it);
         }
     }
+}
+
+void MainWindow::on_horizontalSlider_valueChanged(int value)
+{
+    difficulty=value;
 }

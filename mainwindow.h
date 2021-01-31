@@ -3,9 +3,11 @@
 
 #include <meteor.h>
 #include <mete.h>
+#include "moneda.h"
 #define tiempo 0.1
 #define G 10
 #define TT 60
+#define xTT 30
 #include <QMainWindow>
 #include "muros.h"
 #include <QGraphicsScene>
@@ -74,6 +76,8 @@ private slots:
 
     void on_pushButton_11_clicked();
 
+    void on_horizontalSlider_valueChanged(int value);
+
 private:
     Ui::MainWindow *ui;
     QTimer *timer, *timer2, *timer3, *timerP2, *timerCron2;
@@ -85,7 +89,7 @@ private:
     double posicionX=0, posicionY=0, velocidadX=-7,velocidad2X=8,posicion2X=0, posicion2Y=0;
     QMessageBox message;
     float dt; float x,y,alto,ancho,te,i,rad;float acum=0,acum2=0;
-    int h_limit,tm,bandera=0,multijugador=0;
+    int h_limit,tm,bandera=0,multijugador=0,difficulty=10;
     int v_limit, cronometro=TT, cronometro2=TT, level=0;
     bool bandP1=false, bandP2=false;
     void keyPressEvent(QKeyEvent *event);
@@ -93,6 +97,7 @@ private:
     void borderCollision2(mete *b, mete *c);
     QList<meteor *> bars;
     QList<muros *> muro;
+    QList<moneda *> monedas;
     meteor *player1, *player2;
 };
 #endif // MAINWINDOW_H
