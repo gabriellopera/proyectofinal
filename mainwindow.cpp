@@ -40,7 +40,6 @@ MainWindow::MainWindow(QWidget *parent)
         scene->addItem(*it);
     }
 
-
     QBrush brush(Qt::yellow);
     QBrush brush2(Qt::black);
     QBrush brush3(Qt::red);
@@ -104,6 +103,7 @@ void MainWindow::actualizar()
 {
         player1->actualizar(v_limit);
         borderCollision(player1->getEsf());
+
 }
 
 void MainWindow::actualizar2()
@@ -245,7 +245,17 @@ void MainWindow::borderCollision(mete *b)
         }
     }
 
-
+    if(cronometro==0){
+        timer->stop();
+        timer2->stop();
+        timer3->stop();
+        timerCron2->stop();
+        timerP2->stop();
+        message.setText("PERDISTE!! EL TIEMPO HA FINALIZADO");
+        message.setInformativeText("");
+        message.exec();
+        cronometro=TT;
+    }
 }
 
 void MainWindow::borderCollision2(mete *b, mete *c)
@@ -685,15 +695,21 @@ void MainWindow::on_pushButton_10_clicked() //single
     multijugador=0;
 }
 
-void MainWindow::on_pushButton_11_clicked()//reiniciar
+void MainWindow::on_pushButton_11_clicked()//restart
 {
-    mete *b = bars.at(0)->getEsf();
+    mete *b = player1->getEsf();
     if(level==0){
+
         cronometro=TT;
         b->set_vel(0,0,800,-10);
         posicionX=0;
         posicionY=0;
         acum=0;
+        timer->start(15);
+        timer2->start(difficulty);
+        timer3->start(1000);
+        timerCron2->start(1000);
+        timerP2->start(15);
     }
     if(level==1){
         bandera=0;
@@ -705,6 +721,11 @@ void MainWindow::on_pushButton_11_clicked()//reiniciar
         posicion2X=0;
         posicion2Y=0;
         acum=0;acum2=0;level=0;
+        timer->start(15);
+        timer2->start(difficulty);
+        timer3->start(1000);
+        timerCron2->start(1000);
+        timerP2->start(15);
     }
     if(level==2){
         bandera=0;
@@ -730,6 +751,11 @@ void MainWindow::on_pushButton_11_clicked()//reiniciar
         {
             scene->addItem(*it);
         }
+        timer->start(15);
+        timer2->start(difficulty);
+        timer3->start(1000);
+        timerCron2->start(1000);
+        timerP2->start(15);
     }
 }
 
