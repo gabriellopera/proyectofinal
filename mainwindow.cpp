@@ -625,18 +625,47 @@ void MainWindow::on_pushButton_2_clicked() //sig in
 
 void MainWindow::on_pushButton_3_clicked() //save
 {
-    mete * b = bars.at(0)->getEsf();
-    string nomo2=name.toStdString();
-    string nomo="C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/partidas/";
-    nomo.append(nomo2);
-    nomo.append(".txt");
+    mete * b = player1->getEsf();
+    name = ui->lineEdit->text();
 
-       fstream Fichero(nomo);
-        Fichero<<name.toStdString()<<" "<<b->getPX()<<" "<<b->getPY()<<" "<<cronometro<<endl;
+    if(multijugador==0){
 
-        Fichero.close();
+        string Nnames, posx, posy,cron;
 
+        ifstream Leer;
+        ofstream Temp, Guardar;
+        Guardar.open("C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/guardar.txt",ios::app);
+        Leer.open("C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/guardar.txt");
+        Temp.open("C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/temp.txt");
 
+        bool encontrado=false;
+        Leer>>Nnames;
+        while(!Leer.eof()){
+            Leer>>posx;
+            Leer>>posy;
+            Leer>>cron;
+            if(Nnames==name.toStdString()){
+                encontrado=true;
+                Temp<<Nnames<<"    "<<b->getPX()<<"    "<<b->getPY()<<"    "<<cronometro<<endl;
+            }
+            else{
+                Temp<<Nnames<<"    "<<posx<<"    "<<posy<<"    "<<cron<<endl;
+            }
+            Leer>>Nnames;
+        }
+        if(!encontrado){
+            Temp<<name.toStdString()<<"    "<<b->getPX()<<"    "<<b->getPY()<<"    "<<cronometro<<endl;
+        }
+        Leer.close();
+        Temp.close();
+        Guardar.close();
+        remove("C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/guardar.txt");
+        rename("C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/temp.txt","C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/guardar.txt");
+
+    }
+    if(multijugador==1){
+        mete * c = player2->getEsf();
+    }
 }
 
 void MainWindow::on_pushButton_4_clicked() //load
