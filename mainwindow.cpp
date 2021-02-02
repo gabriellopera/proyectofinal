@@ -236,6 +236,7 @@ void MainWindow::borderCollision(mete *b)
                 message.setText("FELICITACIONES, LOGRASTE ESCAPAR DE LAS GALAXIA!!");
                 message.setInformativeText("");
                 message.exec();
+                scene->removeItem(player1);
 
 
             }
@@ -250,15 +251,29 @@ void MainWindow::borderCollision(mete *b)
     }
 
     if(cronometro==0){
+        scene->removeItem(player1);
         timer->stop();
         timer2->stop();
         timer3->stop();
         timerCron2->stop();
         timerP2->stop();
-        message.setText("PERDISTE!! EL TIEMPO HA FINALIZADO");
+        message.setText("PERDISTE!! EL TIEMPO HA FINALIZADO PARA "+name);
         message.setInformativeText("");
         message.exec();
         cronometro=TT;
+    }
+    if(cronometro2==0){
+        scene->removeItem(player2);
+        timer->stop();
+        timer2->stop();
+        timer3->stop();
+        timerCron2->stop();
+        timerP2->stop();
+        message.setText("PERDISTE!! EL TIEMPO HA FINALIZADO PARA "+name2);
+        message.setInformativeText("");
+        message.exec();
+        cronometro2=TT;
+
     }
 }
 
@@ -964,7 +979,7 @@ void MainWindow::on_pushButton_11_clicked()//restart
 {
     mete *b = player1->getEsf();
     if(level==0){
-
+        scene->addItem(player1);
         cronometro=TT;
         b->set_vel(0,0,800,-10);
         posicionX=0;
@@ -978,6 +993,7 @@ void MainWindow::on_pushButton_11_clicked()//restart
         timerP2->start(15);
     }
     if(level==1){
+        scene->addItem(player1);
         bandera=0;
         delete circle2;
         cronometro=TT;
@@ -994,11 +1010,11 @@ void MainWindow::on_pushButton_11_clicked()//restart
         timerCron2->start(1000);
         timerP2->start(15);
     }
-    if(level==2){
+    if(level==2 || level ==3 || level ==4){
         bandera=0;
         delete circle2;
         cronometro=TT;
-        b->set_vel(0,0,800,-10);
+
         posicionX=0;velocidadX=-7;
         posicionY=0;
         posicion2X=0;
@@ -1024,6 +1040,8 @@ void MainWindow::on_pushButton_11_clicked()//restart
         timer3->start(1000);
         timerCron2->start(1000);
         timerP2->start(15);
+        scene->addItem(player1);
+        b->set_vel(0,0,800,-10);
     }
 }
 
