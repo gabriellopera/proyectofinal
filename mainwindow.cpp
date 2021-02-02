@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     scene->addRect(scene->sceneRect());
 
 
+
     monedas.append(new moneda(-35,-35,525,360));
     monedas.append(new moneda(-35,-35,225,200));
     monedas.append(new moneda(-35,-35,500,140));
@@ -199,6 +200,7 @@ void MainWindow::borderCollision(mete *b)
                 message.setText("PASASTE A LA SEGUNDA GALAXIA!!");
                 message.setInformativeText("");
                 message.exec();
+                scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));
                 bandera=2;
                 circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
                 timer->start(15);
@@ -210,6 +212,7 @@ void MainWindow::borderCollision(mete *b)
                 message.setInformativeText("");
                 message.exec();
                 bandera+=1;
+                scene->setBackgroundBrush(QBrush(QImage(":/images/universo4.jpg")));
                 for(int i=0;i<muro.size();i++)
                 {
                     scene->removeItem(muro.at(i));
@@ -233,6 +236,7 @@ void MainWindow::borderCollision(mete *b)
                 message.setText("FELICITACIONES, LOGRASTE ESCAPAR DE LAS GALAXIA!!");
                 message.setInformativeText("");
                 message.exec();
+
 
             }
         }
@@ -356,56 +360,73 @@ void MainWindow::borderCollision2(mete *b, mete *c)
         }
     }
 
-
-    if(multijugador==0){
-        if(player1->collidesWithItem(negro)){
-            level+=1;
-            b->set_vel(-1*b->getVX(),-1*b->getVY(),800,400);
-            timer->stop();
-            timer2->stop();
-            timer3->stop();
-            if(level==1){
-                message.setText("PASASTE A LA SEGUNDA GALAXIA!!");
-                message.setInformativeText("");
-                message.exec();
-                bandera=2;
-                circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
-                timer->start(15);
-                timer2->start(difficulty-1);
-                timer3->start(1000);
-            }
-            if(level==2){
-                message.setText("PASASTE A LA TERCERA GALAXIA!!");
-                message.setInformativeText("");
-                message.exec();
-                bandera+=1;
-                for(int i=0;i<muro.size();i++)
-                {
-                    scene->removeItem(muro.at(i));
-                    muro.removeAt(i);
-                }
-                muro.append(new muros(20,170,-70,-60));
-                muro.append(new muros(220,20,-180,-60));
-                muro.append(new muros(220,20,-70,-340));
-                muro.append(new muros(20,170,-600,-120));
-                muro.append(new muros(220,20,-460,-390));
-                muro.append(new muros(220,20,-200,-240));
-                for(auto it=muro.begin();it!=muro.end();it++)
-                {
-                    scene->addItem(*it);
-                }
-                timer->start(15);
-                timer2->start(difficulty-2);
-                timer3->start(1000);
-            }
-            if(level==3){
-                message.setText("FELICITACIONES, LOGRASTE ESCAPAR DE LAS GALAXIA!!");
-                message.setInformativeText("");
-                message.exec();
-
-            }
+    for(int i=0;i<monedas.size();i++)
+    {
+        if(player1->collidesWithItem(monedas.at(i))){
+            scene->removeItem(monedas.at(i));
+            monedas.removeAt(i);
+            cronometro+=xTT;
         }
     }
+
+    for(int i=0;i<monedas.size();i++)
+    {
+        if(player2->collidesWithItem(monedas.at(i))){
+            scene->removeItem(monedas.at(i));
+            monedas.removeAt(i);
+            cronometro2+=xTT;
+        }
+    }
+
+//    if(multijugador==0){
+//        if(player1->collidesWithItem(negro)){
+//            level+=1;
+//            b->set_vel(-1*b->getVX(),-1*b->getVY(),800,400);
+//            timer->stop();
+//            timer2->stop();
+//            timer3->stop();
+//            if(level==1){
+//                message.setText("PASASTE A LA SEGUNDA GALAXIA!!");
+//                message.setInformativeText("");
+//                message.exec();
+//                bandera=2;
+//                circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
+//                timer->start(15);
+//                timer2->start(difficulty-1);
+//                timer3->start(1000);
+//            }
+//            if(level==2){
+//                message.setText("PASASTE A LA TERCERA GALAXIA!!");
+//                message.setInformativeText("");
+//                message.exec();
+//                bandera+=1;
+//                for(int i=0;i<muro.size();i++)
+//                {
+//                    scene->removeItem(muro.at(i));
+//                    muro.removeAt(i);
+//                }
+//                muro.append(new muros(20,170,-70,-60));
+//                muro.append(new muros(220,20,-180,-60));
+//                muro.append(new muros(220,20,-70,-340));
+//                muro.append(new muros(20,170,-600,-120));
+//                muro.append(new muros(220,20,-460,-390));
+//                muro.append(new muros(220,20,-200,-240));
+//                for(auto it=muro.begin();it!=muro.end();it++)
+//                {
+//                    scene->addItem(*it);
+//                }
+//                timer->start(15);
+//                timer2->start(difficulty-2);
+//                timer3->start(1000);
+//            }
+//            if(level==3){
+//                message.setText("FELICITACIONES, LOGRASTE ESCAPAR DE LAS GALAXIA!!");
+//                message.setInformativeText("");
+//                message.exec();
+
+//            }
+//        }
+//    }
 
     if(multijugador==1){
         if(player1->collidesWithItem(negro)){
@@ -429,6 +450,7 @@ void MainWindow::borderCollision2(mete *b, mete *c)
                     message.setInformativeText("");
                     message.exec();
                     bandera=2;
+                    scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));
                     circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
                     timer->start(15);
                     timer2->start(difficulty-2);
@@ -630,7 +652,7 @@ void MainWindow::on_pushButton_3_clicked() //save
 
     if(multijugador==0){
 
-        string Nnames, posx, posy,cron;
+        string Nnames, posx, posy,cron,galaxy,difil,banderr;
 
         ifstream Leer;
         ofstream Temp, Guardar;
@@ -644,17 +666,20 @@ void MainWindow::on_pushButton_3_clicked() //save
             Leer>>posx;
             Leer>>posy;
             Leer>>cron;
+            Leer>>galaxy;
+            Leer>>difil;
+            Leer>>banderr;
             if(Nnames==name.toStdString()){
                 encontrado=true;
-                Temp<<Nnames<<"    "<<b->getPX()<<"    "<<b->getPY()<<"    "<<cronometro<<endl;
+                Temp<<Nnames<<"    "<<b->getPX()<<"    "<<b->getPY()<<"    "<<cronometro<<"    "<<level+1<<"    "<<difficulty<<"    "<<bandera<<endl;
             }
             else{
-                Temp<<Nnames<<"    "<<posx<<"    "<<posy<<"    "<<cron<<endl;
+                Temp<<Nnames<<"    "<<posx<<"    "<<posy<<"    "<<cron<<"    "<<galaxy<<"    "<<difil<<"    "<<banderr<<endl;
             }
             Leer>>Nnames;
         }
         if(!encontrado){
-            Temp<<name.toStdString()<<"    "<<b->getPX()<<"    "<<b->getPY()<<"    "<<cronometro<<endl;
+            Temp<<name.toStdString()<<"    "<<b->getPX()<<"    "<<b->getPY()<<"    "<<cronometro<<"    "<<level+1<<"    "<<difficulty<<"    "<<bandera<<endl;
         }
         Leer.close();
         Temp.close();
@@ -670,7 +695,218 @@ void MainWindow::on_pushButton_3_clicked() //save
 
 void MainWindow::on_pushButton_4_clicked() //load
 {
+    mete * b = player1->getEsf();
+    name = ui->lineEdit->text();
+    QBrush brush4(Qt::red);
 
+    if(multijugador==0){
+
+        string Nnames, posx, posy,cron,galaxy,difil,banderr;
+
+        ifstream Leer;
+        ofstream Guardar;
+        Guardar.open("C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/guardar.txt",ios::app);
+        Leer.open("C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/guardar.txt");
+
+
+        bool encontrado=false;
+        Leer>>Nnames;
+        while(!Leer.eof()){
+            Leer>>posx;
+            Leer>>posy;
+            Leer>>cron;
+            Leer>>galaxy;
+            Leer>>difil;
+            Leer>>banderr;
+            if(Nnames==name.toStdString()){
+                encontrado=true;
+                if((level+1)==1){
+                    if(stoi(galaxy)==1){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                    if(stoi(galaxy)==2){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        timer2->start(difficulty-1);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));
+                        circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name);
+                        message.setInformativeText("");
+                        message.exec();
+
+                    }
+                    if(stoi(galaxy)==3){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        timer2->start(difficulty-2);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo4.jpg")));
+                        circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        muro.append(new muros(20,170,-70,-60));
+                        muro.append(new muros(220,20,-180,-60));
+                        muro.append(new muros(220,20,-70,-340));
+                        muro.append(new muros(20,170,-600,-120));
+                        muro.append(new muros(220,20,-460,-390));
+                        muro.append(new muros(220,20,-200,-240));
+                        for(auto it=muro.begin();it!=muro.end();it++)
+                        {
+                            scene->addItem(*it);
+                        }
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                }
+                else if((level+1)==2){
+                    if(stoi(galaxy)==1){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
+                        delete circle2;
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                    if(stoi(galaxy)==2){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));
+                        timer2->start(difficulty-1);
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                    if(stoi(galaxy)==3){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo4.jpg")));
+                        timer2->start(difficulty-2);
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        muro.append(new muros(20,170,-70,-60));
+                        muro.append(new muros(220,20,-180,-60));
+                        muro.append(new muros(220,20,-70,-340));
+                        muro.append(new muros(20,170,-600,-120));
+                        muro.append(new muros(220,20,-460,-390));
+                        muro.append(new muros(220,20,-200,-240));
+                        for(auto it=muro.begin();it!=muro.end();it++)
+                        {
+                            scene->addItem(*it);
+                        }
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+
+                }
+                else{
+                    if(stoi(galaxy)==1){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
+                        delete circle2;
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        muro.append(new muros(20,170,-70,-60));
+                        muro.append(new muros(220,20,-180,-60));
+                        muro.append(new muros(220,20,-70,-340));
+                        muro.append(new muros(20,170,-600,-120));
+                        muro.append(new muros(220,20,-460,-390));
+                        for(auto it=muro.begin();it!=muro.end();it++)
+                        {
+                            scene->addItem(*it);
+                        }
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                    if(stoi(galaxy)==2){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));
+                        timer2->start(difficulty-1);
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        muro.append(new muros(20,170,-70,-60));
+                        muro.append(new muros(220,20,-180,-60));
+                        muro.append(new muros(220,20,-70,-340));
+                        muro.append(new muros(20,170,-600,-120));
+                        muro.append(new muros(220,20,-460,-390));
+                        for(auto it=muro.begin();it!=muro.end();it++)
+                        {
+                            scene->addItem(*it);
+                        }
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                    if(stoi(galaxy)==3){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo4.jpg")));
+                        timer2->start(difficulty-2);
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                }
+            }
+            Leer>>Nnames;
+        }
+        if(!encontrado){
+            message.setText("NO SE TIENE PARTIDA GUARDADA CON EL USUARIO "+name);
+            message.setInformativeText("");
+            message.exec();
+        }
+        Leer.close();
+
+        Guardar.close();
+    }
 }
 
 void MainWindow::on_pushButton_5_clicked()
@@ -734,6 +970,7 @@ void MainWindow::on_pushButton_11_clicked()//restart
         posicionX=0;
         posicionY=0;
         acum=0;
+        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
         timer->start(15);
         timer2->start(difficulty);
         timer3->start(1000);
@@ -749,6 +986,7 @@ void MainWindow::on_pushButton_11_clicked()//restart
         posicionY=0;
         posicion2X=0;
         posicion2Y=0;
+        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
         acum=0;acum2=0;level=0;
         timer->start(15);
         timer2->start(difficulty);
@@ -765,6 +1003,7 @@ void MainWindow::on_pushButton_11_clicked()//restart
         posicionY=0;
         posicion2X=0;
         posicion2Y=0;
+        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
         acum=0;acum2=0;level=0;
         for(int i=0;i<muro.size();i++)
         {

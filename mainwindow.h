@@ -99,5 +99,6 @@ private:
     QList<muros *> muro;
     QList<moneda *> monedas;
     meteor *player1, *player2;
+    QMainWindow Q;
 };
 #endif // MAINWINDOW_H
