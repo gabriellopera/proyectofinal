@@ -8,11 +8,11 @@ MainWindow::MainWindow(QWidget *parent)
     srand(time(NULL));
     ui->setupUi(this);
 
+    //Limites para la escena
     h_limit = 800;
     v_limit = 450;
 
-    //scene = new QGraphicsScene(0,0,0,0);
-
+    //Configuración para la escena con los limites
     scene = new QGraphicsScene(this);
     scene->setSceneRect(0,0,h_limit,v_limit);
     scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
@@ -20,42 +20,41 @@ MainWindow::MainWindow(QWidget *parent)
     scene->addRect(scene->sceneRect());
 
 
-
+    //Se agregan monedas a la lista de monedas, con su respectiva posición
     monedas.append(new moneda(-35,-35,525,360));
     monedas.append(new moneda(-35,-35,225,200));
     monedas.append(new moneda(-35,-35,500,140));
     monedas.append(new moneda(-35,-35,160,40));
     monedas.append(new moneda(-35,-35,30,360));
-    for(auto it=monedas.begin();it!=monedas.end();it++){
+    for(auto it=monedas.begin();it!=monedas.end();it++){ //Ciclo para añadir cada una de las monedas a la escena
         scene->addItem(*it);
     }
 
-
+    //Se agregan los muros a la lista de muro
     muro.append(new muros(20,170,-70,-60));
     muro.append(new muros(220,20,-180,-60));
     muro.append(new muros(220,20,-70,-340));
     muro.append(new muros(20,170,-600,-120));
     muro.append(new muros(220,20,-460,-390));
-    for(auto it=muro.begin();it!=muro.end();it++)
+    for(auto it=muro.begin();it!=muro.end();it++) //Ciclo para añadir cada uno de los muros a la escena
     {
         scene->addItem(*it);
     }
 
-    QBrush brush(Qt::yellow);
+    QBrush brush(Qt::yellow); //Propiedades de color para las elipses o circulos
     QBrush brush2(Qt::black);
     QBrush brush3(Qt::red);
 
-    pend2 = scene->addEllipse(x1_pend+300,  y1_pend+100,radio1_pend, radio2_pend, pen, brush);
-    pend = scene->addEllipse(x1_pend,  y1_pend,radio1_pend, radio2_pend, pen, brush);
+    pend = scene->addEllipse(x1_pend,  y1_pend,radio1_pend, radio2_pend, pen, brush); //Se crea objeto con propiedades del péndulo
+    pend2 = scene->addEllipse(x1_pend+300,  y1_pend+100,radio1_pend, radio2_pend, pen, brush); //Se crea segundo péndulo
     //negro = scene->addEllipse(10,10,40,40,pen,brush2);
-    negro = scene->addEllipse(690,10,40,40,pen,brush2);
-    circle = scene->addEllipse(posicionX,posicionY,40,40,pen,brush3);
-    magnitud = sqrt(pow(x1_pend - x2_pend, 2)+ pow(y1_pend - y2_pend, 2));
-
+    negro = scene->addEllipse(690,10,40,40,pen,brush2); //Se crea objeto para definir cuando el jugador llega a su objetivo
+    circle = scene->addEllipse(posicionX,posicionY,40,40,pen,brush3); //Se crea objeto con propiedades senoidales
+    magnitud = sqrt(pow(x1_pend - x2_pend, 2)+ pow(y1_pend - y2_pend, 2)); //Magnitud para movimiento del péndulo
+    //Se crean 5 timer para tener un mejor manejo de los movimientos de los objetos
     timer = new QTimer(this);
     timer->start(15);
     timer2 = new QTimer(this);
-
     timer3 = new QTimer(this);
     timer3->start(1000);
     timerCron2 = new QTimer(this);
@@ -63,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
     timerP2 = new QTimer(this);
     timerP2->start(15);
 
-
+    //Se ocultan todos los botones, menos los principales para crear el menú de bienvenida
     ui->pushButton_3->hide();
     ui->pushButton->hide();
     ui->pushButton_4->hide();
@@ -89,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
-MainWindow::~MainWindow()
+MainWindow::~MainWindow() //Destructor para eliminar escena y los timer
 {
     delete timer;
     delete timer2;
@@ -100,14 +99,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::actualizar()
+void MainWindow::actualizar()//Función para evaluar las condiciones de impacto de player1 definidas en bordercoliision
 {
         player1->actualizar(v_limit);
         borderCollision(player1->getEsf());
 
 }
 
-void MainWindow::actualizar2()
+void MainWindow::actualizar2()//Función para evaluar las condiciones de impacto de player1 y player2 definidas en bordercoliision2
 {
     if(multijugador==1){
         player2->actualizar(v_limit);
@@ -116,56 +115,56 @@ void MainWindow::actualizar2()
 
 }
 
-void MainWindow::crono()
+void MainWindow::crono() //Función para llevar control del tiempo de Player1 y asignarlo al display
 {
     cronometro-=1;
     ui->lcdNumber->display(cronometro);
     ui->lcdNumber_2->display(level+1);
 }
 
-void MainWindow::crono2()
+void MainWindow::crono2() //Función para llevar control del tiempo de Player2 y asignarlo al display
 {
     cronometro2-=1;
     ui->lcdNumber_3->display(cronometro2);
 }
 
-void MainWindow::borderCollision(mete *b)
-{   int z=5;QBrush brush4(Qt::red);
-    if(b->getPX()<b->getR()){
-        b->set_vel(-1*(0+(rand()%z))*b->getVX(),b->getVY(),b->getR(),b->getPY());
+void MainWindow::borderCollision(mete *b) //Condiciones de impacto para player1
+{   int z=5;QBrush brush4(Qt::red);//Propiedades de la Elipse
+    if(b->getPX()<b->getR()){ //Condicion para no sobrepasar el eje X negativo
+        b->set_vel(-1*(0+(rand()%z))*b->getVX(),b->getVY(),b->getR(),b->getPY());//Se cambia la dirección y se le asigna un coeficiente de restitución aleatorio
     }
-    if(b->getPX()>h_limit-b->getR()){
+    if(b->getPX()>h_limit-b->getR()){ //Condicion para no sobrepasar el eje X positivo
         b->set_vel(-1*(0+(rand()%z))*b->getVX(),b->getVY(),h_limit-b->getR(),b->getPY());
     }
-    if(b->getPY()<b->getR()){
+    if(b->getPY()<b->getR()){ //Condicion para no sobrepasar el eje Y positivo
         b->set_vel(b->getVX(),-1*(0+(rand()%z))*b->getVY(),b->getPX(),b->getR());
     }
-    if(b->getPY()>v_limit-b->getR()){
+    if(b->getPY()>v_limit-b->getR()){//Condicion para no sobrepasar el eje Y negativo
         b->set_vel(b->getVX(),-1*(0+(rand()%z))*b->getVY(),b->getPX(),v_limit-b->getR());
     }
 
-    if(posicionX>h_limit-190){
+    if(posicionX>h_limit-190){ //Condición para límites del circulo senoidal
         velocidadX=7;
     }
-    if(posicionX<-150){
+    if(posicionX<-150){ //Condición para límites del circulo senoidal
         velocidadX=-7;
     }
-    if(posicion2X>h_limit-190){
+    if(posicion2X>h_limit-190){ //Condición para límites del segundo circulo senoidal
         velocidad2X=(7+(rand()%12));
     }
-    if(posicion2X<-150){
+    if(posicion2X<-150){ //Condición para límites del segundo circulo senoidal
         velocidad2X=-(5+(rand()%11));
     }
-    if(player1->collidesWithItem(pend)){
+    if(player1->collidesWithItem(pend)){ //Si se colisiona con el pendulo regresa a la posición inicial
         b->set_vel(0,0,800,-10);
     }
-    if(player1->collidesWithItem(pend2)){
+    if(player1->collidesWithItem(pend2)){ //Si se colisiona con el pendulo2 regresa a la posición inicial
         b->set_vel(0,0,800,-10);
     }
-    if(player1->collidesWithItem(circle)){
+    if(player1->collidesWithItem(circle)){ //Si se colisiona con el circulo regresa a la posición inicial
         b->set_vel(0,0,800,-10);
     }
-    for(int i=0;i<monedas.size();i++)
+    for(int i=0;i<monedas.size();i++)// Ciclo para remover las monedas en caso de colisión
     {
         if(player1->collidesWithItem(monedas.at(i))){
             scene->removeItem(monedas.at(i));
@@ -173,12 +172,12 @@ void MainWindow::borderCollision(mete *b)
             cronometro+=xTT;
         }
     }
-    if(bandera==2){
+    if(bandera==2){ //Si la bandera se activa, es decir que se está en el nivel 2, entonces se evalua la colision con el circutio senoidal2
         if(player1->collidesWithItem(circle2)){
             b->set_vel(0,0,800,-10);
         }
     }
-    if(bandera==3){
+    if(bandera==3){ //si la bandera se activa, se agrega colision con el senoidal2 y adicional con los muros, regresando a la posicion inicial
         if(player1->collidesWithItem(circle2)){
             b->set_vel(0,0,800,-10);
         }
@@ -189,22 +188,22 @@ void MainWindow::borderCollision(mete *b)
             }
         }
     }
-    if(multijugador==0){
-        if(player1->collidesWithItem(negro)){
-            level+=1;
-            b->set_vel(0,0,800,400);
-            timer->stop();
+    if(multijugador==0){ //bandera para saber el modo de jugador
+        if(player1->collidesWithItem(negro)){ //Se evaluan las condiciones de en que el objeto logra llegar al objetivo para así avanzar de nivel
+            level+=1; //aumentamos de nivel
+            b->set_vel(0,0,800,400); //regresamos a la posición inicial
+            timer->stop();//detenemos los timers
             timer2->stop();
             timer3->stop();
             if(level==1){
-                message.setText("PASASTE A LA SEGUNDA GALAXIA!!");
+                message.setText("PASASTE A LA SEGUNDA GALAXIA!!"); //mensaje alertando del siguiente nivel
                 message.setInformativeText("");
                 message.exec();
-                scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));
+                scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));//cambiamos fondos para diferenciar galaxias
                 bandera=2;
-                circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
-                timer->start(15);
-                timer2->start(difficulty-1);
+                circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);//se agrega el segundo circulo senoidal
+                timer->start(15);//Comendzamos los timer
+                timer2->start(difficulty-1); //este timer maneja todos los enemigos, de esta forma al inicio de la partida difficulty recibe un valor que el usuario escoja, asi se varia la dificultad
                 timer3->start(1000);
             }
             if(level==2){
@@ -212,13 +211,13 @@ void MainWindow::borderCollision(mete *b)
                 message.setInformativeText("");
                 message.exec();
                 bandera+=1;
-                scene->setBackgroundBrush(QBrush(QImage(":/images/universo4.jpg")));
-                for(int i=0;i<muro.size();i++)
+                scene->setBackgroundBrush(QBrush(QImage(":/images/universo4.jpg"))); //Cambiamos fondo de pantalla
+                for(int i=0;i<muro.size();i++) //Remover todos los muros
                 {
                     scene->removeItem(muro.at(i));
                     muro.removeAt(i);
                 }
-                muro.append(new muros(20,170,-70,-60));
+                muro.append(new muros(20,170,-70,-60)); //luego los volvemos agregar pero con uno adicional y en diferente posición
                 muro.append(new muros(220,20,-180,-60));
                 muro.append(new muros(220,20,-70,-340));
                 muro.append(new muros(20,170,-600,-120));
@@ -233,24 +232,24 @@ void MainWindow::borderCollision(mete *b)
                 timer3->start(1000);
             }
             if(level==3){
-                message.setText("FELICITACIONES, LOGRASTE ESCAPAR DE LAS GALAXIA!!");
+                message.setText("FELICITACIONES, LOGRASTE ESCAPAR DE LAS GALAXIA!!");//finaliza partida
                 message.setInformativeText("");
                 message.exec();
-                scene->removeItem(player1);
+                scene->removeItem(player1); //se remueve el player1
 
 
             }
         }
     }
-    for(auto it=muro.begin();it!=muro.end();it++)
+    for(auto it=muro.begin();it!=muro.end();it++) //Ciclo para colisiones con muros
     {
 
-        if(player1->collidesWithItem(*it)){
+        if(player1->collidesWithItem(*it)){ //Si colisiona se le multiplica -1 a la velocidad actual, así se cambia sentido de movimiento
             b->set_vel(-1*b->getVX(),-1*b->getVY(),b->getPX(),b->getPY());
         }
     }
 
-    if(cronometro==0){
+    if(cronometro==0){ //Se evalua si finaliza el tiempo del player1 para acabar la partida
         scene->removeItem(player1);
         timer->stop();
         timer2->stop();
@@ -262,7 +261,7 @@ void MainWindow::borderCollision(mete *b)
         message.exec();
         cronometro=TT;
     }
-    if(cronometro2==0){
+    if(cronometro2==0){ //Se evalua si finaliza el tiempo del player2 para acabar la partida
         scene->removeItem(player2);
         timer->stop();
         timer2->stop();
@@ -277,11 +276,11 @@ void MainWindow::borderCollision(mete *b)
     }
 }
 
-void MainWindow::borderCollision2(mete *b, mete *c)
+void MainWindow::borderCollision2(mete *b, mete *c) //Función para condiciones de colisión en caso de multiplayer, semejantes a las anteriores
 {   int z=5;QBrush brush4(Qt::red);
     //player1
     if(multijugador==1){
-    if(b->getPX()<b->getR()){
+    if(b->getPX()<b->getR()){ //Condiciones de impacto player1
         b->set_vel(-1*(0+(rand()%z))*b->getVX(),b->getVY(),b->getR(),b->getPY());
     }
     if(b->getPX()>h_limit-b->getR()){
@@ -294,7 +293,7 @@ void MainWindow::borderCollision2(mete *b, mete *c)
         b->set_vel(b->getVX(),-1*(0+(rand()%z))*b->getVY(),b->getPX(),v_limit-b->getR());
     }
     //player2
-    if(c->getPX()<c->getR()){
+    if(c->getPX()<c->getR()){ //Condiciones de impacto player2
             c->set_vel(-1*(0+(rand()%z))*c->getVX(),c->getVY(),c->getR(),c->getPY());
     }
     if(c->getPX()>h_limit-c->getR()){
@@ -443,21 +442,21 @@ void MainWindow::borderCollision2(mete *b, mete *c)
 //        }
 //    }
 
-    if(multijugador==1){
+    if(multijugador==1){ //Condicional en caso de alcanzar el agujero negro para player1
         if(player1->collidesWithItem(negro)){
             b->set_vel(-1*b->getVX(),-1*b->getVY(),800,400);
             timer->stop();
             timer3->stop();
             bandP1=true;
         }
-        if(player2->collidesWithItem(negro)){
+        if(player2->collidesWithItem(negro)){//Condicional en caso de alcanzar el agujero negro para player1
             c->set_vel(-1*c->getVX(),-1*c->getVY(),800,400);
             timerP2->stop();
             timerCron2->stop();
             bandP2=true;
         }
 
-        if(bandP1==true && bandP2==true){
+        if(bandP1==true && bandP2==true){ //Si ambos alcanzan el agujero negro, continua el siguiente nivel
             timer2->stop();
             level+=1;
 
@@ -489,7 +488,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     mete * b = player1->getEsf();
 
 
-    if(multijugador==0){
+    if(multijugador==0){ //Teclas para movimiento player1
         if(event->key() == Qt::Key_D){
             b->set_vel(10,b->getVY(),b->getPX(),b->getPY());
         }
@@ -500,7 +499,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             b->set_vel(b->getVX(),25,b->getPX(),b->getPY());
         }
     }
-    else if(multijugador==1){
+    else if(multijugador==1){ //Teclas para movimiento player1 y player2
         mete * c = player2->getEsf();
 
         if(event->key() == Qt::Key_D){
@@ -525,32 +524,32 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
 }
 
-void MainWindow::pendulo()
+void MainWindow::pendulo() //Función para el pendulo
 {
 
-    double angulo = asin((x1_pend ) / magnitud);
-    double a_x = -G * sin(angulo);
-    static double vx = 0;
-    vx += a_x * tiempo;
+    double angulo = asin((x1_pend ) / magnitud); //Angulo en radianes para
+    double a_x = -G * sin(angulo); //Aceleración eje x
+    static double vx = 0; //Velocidad eje x
+    vx += a_x * tiempo; //Velocidad eje x en función del tiempo
     static double w = 0;
-    w = vx / magnitud;
-    double ace_angulo = w / tiempo;
-    angulo = angulo + w * tiempo  + (ace_angulo / 2 ) * tiempo * tiempo;
-    x1_pend = magnitud * sin(angulo);
-    y1_pend = magnitud * cos(angulo);
-    pend->setPos(x1_pend, y1_pend);
-    pend2->setPos(x1_pend, y1_pend);
+    w = vx / magnitud; //
+    double ace_angulo = w / tiempo; //Cambio de angulo en funcion del tiepmpo
+    angulo = angulo + w * tiempo  + (ace_angulo / 2 ) * tiempo * tiempo; //Angulo en función del tiempo
+    x1_pend = magnitud * sin(angulo); //Posicion x
+    y1_pend = magnitud * cos(angulo); //Posición Y
+    pend->setPos(x1_pend, y1_pend); //Se asignan valores de posición al pendulo1
+    pend2->setPos(x1_pend, y1_pend); //Se asignan valores de posición al pendulo2
 
 }
 
 void MainWindow::senoidal()
 {
-    acum+=0.01;
-    posicionX = posicionX - velocidadX*tiempo;
-    posicionY= 5*sin(2*3.1415*acum/2)+posicionY;
-    circle->setPos(posicionX+150,posicionY+70);
+    acum+=0.01; //Sumatoria de todo el tiempo
+    posicionX = posicionX - velocidadX*tiempo; //Velocidad en X en función del tiempo
+    posicionY= 5*sin(2*3.1415*acum/2)+posicionY; //Posición en Y dada una amplitud
+    circle->setPos(posicionX+150,posicionY+70); //Posiciones iniciales para el circulo
 
-    if(bandera==2 || bandera==3){
+    if(bandera==2 || bandera==3){ //Al activarse la bandera, se agrega el circulo2
         acum2+=0.01;
         posicion2X = posicion2X - velocidad2X*tiempo;
         posicion2Y= -5*sin(2*3.1415*acum2/2)+posicion2Y;
@@ -561,15 +560,15 @@ void MainWindow::senoidal()
 void MainWindow::on_pushButton_clicked() //start
 {
     if(multijugador==0){
-        name=ui->lineEdit->text();
-        if(name==""){
+        name=ui->lineEdit->text(); //A la variable name, llevamos lo ingresado por el player 1
+        if(name==""){ //Si es vacio, le solicita que ingrese un usuario
             message.setText("INGRESE USUARIO PARA PLAYER 1");
             message.setInformativeText("");
             message.exec();
         }
 
 
-        else{
+        else{ //Se Oculta el menú principal
             name=ui->lineEdit->text();
             ui->textBrowser_4->show();
             ui->textBrowser_5->hide();
@@ -592,16 +591,16 @@ void MainWindow::on_pushButton_clicked() //start
             ui->lcdNumber_2->show();
             ui->pushButton_14->hide();
             ui->horizontalSlider->hide();
-            player1 = new meteor(1);
-            scene->addItem(player1);
-            timer2->start(difficulty);
-            connect(timer,SIGNAL(timeout()),this,SLOT(actualizar()));//player1
+            player1 = new meteor(1); //Se crea nuestro personaje
+            scene->addItem(player1); //Se agrega nuestro personaje a la escena
+            timer2->start(difficulty); //Se asigna la dificultad seleccionada por el usuario
+            connect(timer,SIGNAL(timeout()),this,SLOT(actualizar())); //Se conectan todos los timers
             connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
             connect(timer3,SIGNAL(timeout()),this,SLOT(crono()));
             connect(timer2,SIGNAL(timeout()),this,SLOT(senoidal()));
         }
     }
-    if(multijugador==1){
+    if(multijugador==1){ //Funciona igual que la parte anterior, a diferencia que aquí se agrega el player2
         name2=ui->lineEdit_2->text();
         if(name2==""){
             message.setText("INGRESE USUARIO PARA PLAYER 2");
@@ -633,12 +632,12 @@ void MainWindow::on_pushButton_clicked() //start
             ui->lcdNumber_3->show();
             ui->pushButton_14->hide();
             ui->horizontalSlider->hide();
-            player1 = new meteor(1);
+            player1 = new meteor(1); //Se crea y se añade ambos personajes a la escena
             scene->addItem(player1);
             player2 = new meteor(2);
             scene->addItem(player2);
             timer2->start(difficulty);
-            connect(timer,SIGNAL(timeout()),this,SLOT(actualizar()));
+            connect(timer,SIGNAL(timeout()),this,SLOT(actualizar())); //Se inicializan todos los timers
             connect(timerP2,SIGNAL(timeout()),this,SLOT(actualizar2()));
             connect(timerCron2,SIGNAL(timeout()),this,SLOT(crono2()));
             connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
@@ -650,7 +649,7 @@ void MainWindow::on_pushButton_clicked() //start
 }
 
 void MainWindow::on_pushButton_2_clicked() //sig in
-{
+{   //Se oculta y se muestran los botones de forma que permita registrar al usuario
     ui->lineEdit->show();
     ui->pushButton->show();
     ui->pushButton_2->hide();
@@ -662,38 +661,38 @@ void MainWindow::on_pushButton_2_clicked() //sig in
 
 void MainWindow::on_pushButton_3_clicked() //save
 {
-    mete * b = player1->getEsf();
-    name = ui->lineEdit->text();
+    mete * b = player1->getEsf(); //Se crea un puntero para manipular al objeto
+    name = ui->lineEdit->text(); //Se obtiene el nombre del usuario registrado
 
     if(multijugador==0){
 
-        string Nnames, posx, posy,cron,galaxy,difil,banderr;
+        string Nnames, posx, posy,cron,galaxy,difil,banderr; //Creamos String para guardar los datos leídos del archivo de texto
 
-        ifstream Leer;
-        ofstream Temp, Guardar;
+        ifstream Leer; //Variable para leer archivos de entrada
+        ofstream Temp, Guardar; //Varibles para manejar archivos de salida
         Guardar.open("C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/guardar.txt",ios::app);
         Leer.open("C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/guardar.txt");
         Temp.open("C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/temp.txt");
 
         bool encontrado=false;
         Leer>>Nnames;
-        while(!Leer.eof()){
+        while(!Leer.eof()){ //Leemos la primera linea de texto
             Leer>>posx;
             Leer>>posy;
             Leer>>cron;
             Leer>>galaxy;
             Leer>>difil;
             Leer>>banderr;
-            if(Nnames==name.toStdString()){
+            if(Nnames==name.toStdString()){ //Si el usuario encontrado es igual al registrado, procede a tomar los nuevos datos
                 encontrado=true;
                 Temp<<Nnames<<"    "<<b->getPX()<<"    "<<b->getPY()<<"    "<<cronometro<<"    "<<level+1<<"    "<<difficulty<<"    "<<bandera<<endl;
             }
-            else{
+            else{ //En caso de que no, guardar los datos actuales
                 Temp<<Nnames<<"    "<<posx<<"    "<<posy<<"    "<<cron<<"    "<<galaxy<<"    "<<difil<<"    "<<banderr<<endl;
             }
             Leer>>Nnames;
         }
-        if(!encontrado){
+        if(!encontrado){ //Si el booleano es false, no hay registros guardados, por lo cual agrega el usuario nuevo con sus datos0.
             Temp<<name.toStdString()<<"    "<<b->getPX()<<"    "<<b->getPY()<<"    "<<cronometro<<"    "<<level+1<<"    "<<difficulty<<"    "<<bandera<<endl;
         }
         Leer.close();
@@ -710,15 +709,15 @@ void MainWindow::on_pushButton_3_clicked() //save
 
 void MainWindow::on_pushButton_4_clicked() //load
 {
-    mete * b = player1->getEsf();
-    name = ui->lineEdit->text();
-    QBrush brush4(Qt::red);
+    mete * b = player1->getEsf(); //Se crea un puntero para manejar el objeto
+    name = ui->lineEdit->text(); //Se obtiene datos del nombre del registro del usuario
+    QBrush brush4(Qt::red); //Color para una Elipse
 
-    if(multijugador==0){
+    if(multijugador==0){ //Se evalua si es single o multiplayer
 
-        string Nnames, posx, posy,cron,galaxy,difil,banderr;
+        string Nnames, posx, posy,cron,galaxy,difil,banderr; //Creamos String para guardar los datos leídos del archivo de texto
 
-        ifstream Leer;
+        ifstream Leer; //Para manipular el archivo en modo lectura
         ofstream Guardar;
         Guardar.open("C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/guardar.txt",ios::app);
         Leer.open("C:/Users/GABRIEL/Documents/QT/Labs QT/ProyectoFinal/Proyecto_final-master/guardar.txt");
@@ -726,7 +725,7 @@ void MainWindow::on_pushButton_4_clicked() //load
 
         bool encontrado=false;
         Leer>>Nnames;
-        while(!Leer.eof()){
+        while(!Leer.eof()){ //Si e nombre coincide, guardamos todos los datos en cada variable
             Leer>>posx;
             Leer>>posy;
             Leer>>cron;
@@ -736,11 +735,11 @@ void MainWindow::on_pushButton_4_clicked() //load
             if(Nnames==name.toStdString()){
                 encontrado=true;
                 if((level+1)==1){
-                    if(stoi(galaxy)==1){
+                    if(stoi(galaxy)==1){ //Asignamos cada una de las variables al objeto y a la configuración de la partida
                         b->set_vel(0,0,stof(posx),stof(posy));
-                        cronometro=stoi(cron);
-                        difficulty=stoi(difil);
-                        level=stoi(galaxy)-1;
+                        cronometro=stoi(cron); //Asignamos el tiempo
+                        difficulty=stoi(difil); //Asignamos dificultad
+                        level=stoi(galaxy)-1; //Asignamos nivel
                         bandera=stoi(banderr);
                         scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
                         message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name);
@@ -931,6 +930,7 @@ void MainWindow::on_pushButton_5_clicked()
 
 void MainWindow::on_pushButton_6_clicked() //play
 {
+    //Iniciamos timers y ocultamos botones
     timer->start(15);
     timer2->start(difficulty);
     timer3->start(1000);
@@ -943,6 +943,7 @@ void MainWindow::on_pushButton_6_clicked() //play
 
 void MainWindow::on_pushButton_7_clicked() //stop
 {
+    //Pausamos timers y ocultamos botones
     timer->stop();
     timer2->stop();
     timer3->stop();
@@ -977,6 +978,7 @@ void MainWindow::on_pushButton_10_clicked() //single
 
 void MainWindow::on_pushButton_11_clicked()//restart
 {
+    //Según en el nivel en que se esté ubicado, asignamos las respectivas variables para comenzar de nuevo desde el nivel 1
     mete *b = player1->getEsf();
     if(level==0){
         scene->addItem(player1);
@@ -1047,5 +1049,6 @@ void MainWindow::on_pushButton_11_clicked()//restart
 
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
+    //Recibimos el valor variable de la dificultad para luego llevarlo al constructor
     difficulty=value;
 }
