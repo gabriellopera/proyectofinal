@@ -1074,7 +1074,7 @@ void MainWindow::on_pushButton_4_clicked() //load
         mete *c=player2->getEsf();
         bool encontrado=false;
         Leer>>Nnames;
-        while(!Leer.eof()){ //Si e nombre coincide, guardamos todos los datos en cada variable
+        while(!Leer.eof()){ //Si el nombre coincide, guardamos todos los datos en cada variable
             Leer>>Nnames2;
             Leer>>posx;
             Leer>>posy;
@@ -1088,9 +1088,9 @@ void MainWindow::on_pushButton_4_clicked() //load
             if(Nnames==(name.toStdString()) && Nnames2==(name2.toStdString())){
                 encontrado=true;
                 c->set_vel(0,0,stof(posx2),stof(posy2)); //player2 le damos su posicion
-                cronometro2=stoi(cron2); //Asignamos el tiempo
+                cronometro2=stoi(cron2); //Asignamos el tiempo para player2
                 if((level+1)==1){
-                    if(stoi(galaxy)==1){ //Asignamos cada una de las variables al objeto y a la configuración de la partida
+                    if(stoi(galaxy)==1){ //Asignamos cada una de las variables al objeto y a la configuración de la partida, dependiendo del nivel en el que esté, realizará diferentes configuraciones
                         b->set_vel(0,0,stof(posx),stof(posy)); //player1 le damos su posicion
                         cronometro=stoi(cron); //Asignamos el tiempo
                         difficulty=stoi(difil); //Asignamos dificultad
@@ -1127,9 +1127,9 @@ void MainWindow::on_pushButton_4_clicked() //load
                         muro.append(new muros(60,60,-120,-280));
                         muro.append(new muros(60,60,-290,-340));
                         muro.append(new muros(60,60,-290,-50));
-                        for(auto it=muro.begin();it!=muro.end();it++)
+                        for(auto it=muro.begin();it!=muro.end();it++)//Agregamos los muros a la escena
                         {
-                            scene->addItem(*it);
+                            scene->addItem(*it);//Agregamos los muros a la escena
                         }
                         scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));
                         circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
@@ -1158,9 +1158,9 @@ void MainWindow::on_pushButton_4_clicked() //load
                         muro.append(new muros(20,170,-600,-120));
                         muro.append(new muros(220,20,-460,-390));
                         muro.append(new muros(220,20,-200,-240));
-                        for(auto it=muro.begin();it!=muro.end();it++)
+                        for(auto it=muro.begin();it!=muro.end();it++)//Agregamos los muros a la escena
                         {
-                            scene->addItem(*it);
+                            scene->addItem(*it);//Agregamos los muros a la escena
                         }
                         QBrush brush2(Qt::black);
                         negro2 = scene->addEllipse(10,10,40,40,pen,brush2);
@@ -1207,9 +1207,9 @@ void MainWindow::on_pushButton_4_clicked() //load
                         muro.append(new muros(60,60,-120,-280));
                         muro.append(new muros(60,60,-290,-340));
                         muro.append(new muros(60,60,-290,-50));
-                        for(auto it=muro.begin();it!=muro.end();it++)
+                        for(auto it=muro.begin();it!=muro.end();it++)//Agregamos los muros a la escena
                         {
-                            scene->addItem(*it);
+                            scene->addItem(*it);//Agregamos los muros a la escena
                         }
                         scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));
                         timer2->start(difficulty-1);
@@ -1236,9 +1236,9 @@ void MainWindow::on_pushButton_4_clicked() //load
                         muro.append(new muros(20,170,-600,-120));
                         muro.append(new muros(220,20,-460,-390));
                         muro.append(new muros(220,20,-200,-240));
-                        for(auto it=muro.begin();it!=muro.end();it++)
+                        for(auto it=muro.begin();it!=muro.end();it++)//Agregamos los muros a la escena
                         {
-                            scene->addItem(*it);
+                            scene->addItem(*it);//Agregamos los muros a la escena
                         }
                         QBrush brush2(Qt::black);
                         negro2 = scene->addEllipse(10,10,40,40,pen,brush2);
@@ -1267,9 +1267,9 @@ void MainWindow::on_pushButton_4_clicked() //load
                         muro.append(new muros(220,20,-70,-340));
                         muro.append(new muros(20,170,-600,-120));
                         muro.append(new muros(220,20,-460,-390));
-                        for(auto it=muro.begin();it!=muro.end();it++)
+                        for(auto it=muro.begin();it!=muro.end();it++)//Agregamos los muros a la escena
                         {
-                            scene->addItem(*it);
+                            scene->addItem(*it);//Agregamos los muros a la escena
                         }
                         QBrush brush2(Qt::black);
                         negro2 = scene->addEllipse(10,10,40,40,pen,brush2);
@@ -1305,9 +1305,9 @@ void MainWindow::on_pushButton_4_clicked() //load
                         muro.append(new muros(60,60,-120,-280));
                         muro.append(new muros(60,60,-290,-340));
                         muro.append(new muros(60,60,-290,-50));
-                        for(auto it=muro.begin();it!=muro.end();it++)
+                        for(auto it=muro.begin();it!=muro.end();it++)//Agregamos los muros a la escena
                         {
-                            scene->addItem(*it);
+                            scene->addItem(*it);//Agregamos los muros a la escena
                         }
                         scene->removeItem(negro2);
 
@@ -1377,6 +1377,7 @@ void MainWindow::on_pushButton_7_clicked() //stop
 
 void MainWindow::on_pushButton_8_clicked() //instructions
 {
+    //mostramos las instrucciones
     ui->textBrowser->show();
     ui->pushButton_15->show();
     ui->textBrowser_4->show();
@@ -1405,24 +1406,22 @@ void MainWindow::on_pushButton_10_clicked() //single
 void MainWindow::on_pushButton_11_clicked()//restart
 {
     //Según en el nivel en que se esté ubicado, asignamos las respectivas variables para comenzar de nuevo desde el nivel 1
-    mete *b = player1->getEsf();
+    mete *b = player1->getEsf();//para manipular la posición y velocidad del objeto
     if(level==0){
-        scene->addItem(player1);
-        cronometro=TT;
-        b->set_vel(0,0,800,-10);
-        posicionX=0;
-        posicionY=0;
-        acum=0;
-
-        timer->start(15);
+        scene->addItem(player1); //creamos nuevamente el objeto
+        cronometro=TT;//reiniciamos tiempo de vida
+        b->set_vel(0,0,800,-10);//le asignamos posicion al objeto player1
+        posicionX=0;//se reinicia posicion de enemigos
+        posicionY=0;//se reinicia posicion de enemigos
+        acum=0;//reiniciamos acumulador del tiempo para posiciones senoidales
+        timer->start(15);//reiniciamos timers
         timer2->start(difficulty);
         timer3->start(1000);
         timerCron2->start(1000);
         timerP2->start(15);
-
         for(int i=0;i<monedas.size();i++)// Ciclo para remover las monedas en caso de colisión
         {
-            scene->removeItem(monedas.at(i));
+            scene->removeItem(monedas.at(i));// Ciclo para remover las monedas en caso de colisión
             monedas.removeAt(i);
         }
         monedas.append(new moneda(-35,-35,525,360));
@@ -1439,22 +1438,20 @@ void MainWindow::on_pushButton_11_clicked()//restart
 
     }
     if(level==1){
-        scene->addItem(player1);
-        bandera=0;
-        delete circle2;
-        cronometro=TT;
-        b->set_vel(0,0,800,-10);
-
-        timer->start(15);
+        scene->addItem(player1);//creamos nuevamente el objeto
+        bandera=0;//reiniciamos bandera
+        delete circle2;//eliminamos objeto enemigo
+        cronometro=TT;//reiniciamos tiempo de vida
+        b->set_vel(0,0,800,-10);//le asignamos posicion al objeto player1
+        timer->start(15);//reiniciamos timers
         timer2->start(difficulty);
         timer3->start(1000);
         timerCron2->start(1000);
         timerP2->start(15);
-
-        posicionX=0;velocidadX=-7;
-        posicionY=0;
-        posicion2X=0;
-        posicion2Y=0;
+        posicionX=0;velocidadX=-7;//se reinicia posicion de enemigos
+        posicionY=0;//se reinicia posicion de enemigos
+        posicion2X=0;//se reinicia posicion de enemigos
+        posicion2Y=0;//se reinicia posicion de enemigos
         for(int i=0;i<muro.size();i++) //Remover todos los muros
         {
             scene->removeItem(muro.at(i));
@@ -1493,40 +1490,40 @@ void MainWindow::on_pushButton_11_clicked()//restart
         for(auto it=monedas.begin();it!=monedas.end();it++){ //Ciclo para añadir cada una de las monedas a la escena
             scene->addItem(*it);
         }
-        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
+        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));//modificamos fondo de la escena
         acum=0;acum2=0;level=0;
 
-        delete negro;
-        QBrush brush2(Qt::black);
+        delete negro;//eliminamos objeto de agujero negro
+        QBrush brush2(Qt::black);//propiedad para el agujero negro
         negro = scene->addEllipse(10,10,40,40,pen,brush2);
     }
     if(level==2 || level==3 || level ==4){
-        bandera=0;
-        delete circle2;
-        cronometro=TT;
+        bandera=0;//reiniciamos bandera
+        delete circle2;//eliminar objeto enemigo
+        cronometro=TT;//reiniciamos tiempo de vida
 
-        posicionX=0;velocidadX=-7;
-        posicionY=0;
-        posicion2X=0;
-        posicion2Y=0;
+        posicionX=0;velocidadX=-7;//se reinicia posicion de enemigos
+        posicionY=0;//se reinicia posicion de enemigos
+        posicion2X=0;//se reinicia posicion de enemigos
+        posicion2Y=0;//se reinicia posicion de enemigos
 
-        timer->start(15);
+        timer->start(15);//reiniciamos timers
         timer2->start(difficulty);
         timer3->start(1000);
         timerCron2->start(1000);
         timerP2->start(15);
-        scene->addItem(player1);
+        scene->addItem(player1);//añadimos objeto a la escena
 
-        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
+        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));//modificamos fondo de la escena
         acum=0;acum2=0;level=0;
         for(int i=0;i<muro.size();i++) //Remover todos los muros
         {
-            scene->removeItem(muro.at(i));
+            scene->removeItem(muro.at(i)); //ciclo para remover los muros
             muro.removeAt(i);
         }
-        for(int i=0;i<muro.size();i++)
+        for(int i=0;i<muro.size();i++) //ciclo para remover los muros
         {
-            scene->removeItem(muro.at(i));
+            scene->removeItem(muro.at(i)); //ciclo para remover los muros
             muro.removeAt(i);
         }
         muro.append(new muros(20,170,-70,-60));
@@ -1534,21 +1531,21 @@ void MainWindow::on_pushButton_11_clicked()//restart
         muro.append(new muros(220,20,-70,-340));
         muro.append(new muros(20,170,-600,-120));
         muro.append(new muros(220,20,-460,-390));
-        for(auto it=muro.begin();it!=muro.end();it++)
+        for(auto it=muro.begin();it!=muro.end();it++)//Agregamos muros a la escena
         {
-            scene->addItem(*it);
+            scene->addItem(*it);//Agregamos muros a la escena
         }
-        for(auto it=muro.begin();it!=muro.end();it++)
+        for(auto it=muro.begin();it!=muro.end();it++)//Agregamos muros a la escena
         {
-            scene->addItem(*it);
+            scene->addItem(*it);//Agregamos muros a la escena
         }
-        for(auto it=muro.begin();it!=muro.end();it++)
+        for(auto it=muro.begin();it!=muro.end();it++)//Agregamos muros a la escena
         {
-            scene->addItem(*it);
+            scene->addItem(*it);//Agregamos muros a la escena
         }
         for(int i=0;i<monedas.size();i++)// Ciclo para remover las monedas en caso de colisión
         {
-            scene->removeItem(monedas.at(i));
+            scene->removeItem(monedas.at(i));// Ciclo para remover las monedas en caso de colisión
             monedas.removeAt(i);
         }
         monedas.append(new moneda(-35,-35,525,360));
@@ -1560,12 +1557,12 @@ void MainWindow::on_pushButton_11_clicked()//restart
             scene->addItem(*it);
         }
 
-        b->set_vel(0,0,800,-10);
-        delete negro;
-        delete negro2;
+        b->set_vel(0,0,800,-10);//le asignamos posicion al objeto player1
+        delete negro;//eliminamos objetos
+        delete negro2;//eliminamos objetos
         QBrush brush2(Qt::black);
-        negro = scene->addEllipse(10,10,40,40,pen,brush2);
-        negro2 = scene->addEllipse(10,10,40,40,pen,brush2);
+        negro = scene->addEllipse(10,10,40,40,pen,brush2);//creamos nuevamente el objeto
+        negro2 = scene->addEllipse(10,10,40,40,pen,brush2);//creamos nuevamente el objeto
     }
 }
 
@@ -1583,3 +1580,4 @@ void MainWindow::on_pushButton_15_clicked() // x
     ui->pushButton_15->hide();
     ui->textBrowser_4->hide();
 }
+

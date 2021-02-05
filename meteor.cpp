@@ -5,14 +5,14 @@ meteor::meteor(int x):escala(0.8)
     float posx,posy,velx,vely,mass,r,K,e; //variables
 
     //Variables iniciales bajo las cuales iniciará el objeto
-    posx = 800;// 32;
-    posy = 400;//150;
-    r = 15;
-    mass = 50;
-    velx = 0;
-    vely = 0;
-    K = 0.2;
-    e = (0+(rand()%4)); //Coeficiente de restitución varia, de esta forma se hace el juego dinámico
+    posx = 800;//posicion en x inicial
+    posy = 400;//posicion en y inicial
+    r = 15;//radio
+    mass = 50;//masa
+    velx = 0;//velocidad en x inicial
+    vely = 0;//velocidad en y inicial
+    K = 0.2;//coeficiente de fricción
+    e = (0+(rand()%4)); //Coeficiente de restitución es aleatorio, de esta forma se hace el juego dinámico
     esf = new mete(posx,posy,velx,vely,mass,r,K,e); //Se crea el objeto
 
 
