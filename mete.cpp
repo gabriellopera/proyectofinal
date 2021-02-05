@@ -28,14 +28,15 @@ mete::~mete()
 
 void mete::actualizar()
 {
-    V = pow(((VX*VX)+(VY*VY)),(1/2));
-    angulo = atan2(VY,VX);
-    AX = -((K*(V*V)*(R*R))/mass)*cos(angulo);
-    AY = (-((K*(V*V)*(R*R))/mass)*sin(angulo))-G;
-    PX = PX + ((VX*(dt)))+(((AX*(dt*dt)))/2);
-    PY = PY + ((VY*(dt)))+(((AY*(dt*dt)))/2);
-    VX = VX + AX*dt;
-    VY = VY + AY*dt;
+    //Ecuaciones del movimiento parabólico
+    V = pow(((VX*VX)+(VY*VY)),(1/2)); //magnitud
+    angulo = atan2(VY,VX); //angulo
+    AX = -((K*(V*V)*(R*R))/mass)*cos(angulo); //acelaracion en X
+    AY = (-((K*(V*V)*(R*R))/mass)*sin(angulo))-G; //acelaracion en Y
+    PX = PX + ((VX*(dt)))+(((AX*(dt*dt)))/2); //posición en X
+    PY = PY + ((VY*(dt)))+(((AY*(dt*dt)))/2); //posición en Y
+    VX = VX + AX*dt; //velocidad en X
+    VY = VY + AY*dt; //velocidad en Y
 }
 
 float mete::getPY() const
@@ -77,6 +78,7 @@ float mete::getPX() const
 
 void mete::set_vel(float vx, float vy, float px, float py)
 {
+    //Con esta función se puede manipular el objeto con velocidad y posiciones nuevas
     VX = vx;
     VY = vy;
     PX = px;

@@ -6,7 +6,7 @@
 #include "moneda.h"
 #define tiempo 0.1
 #define G 10
-#define TT 60
+#define TT 100
 #define xTT 30
 #include <QMainWindow>
 #include "muros.h"
@@ -78,11 +78,13 @@ private slots:
 
     void on_horizontalSlider_valueChanged(int value);
 
+
+
 private:
     Ui::MainWindow *ui;
     QTimer *timer, *timer2, *timer3, *timerP2, *timerCron2;
     QGraphicsScene *scene;
-    QGraphicsEllipseItem *pend,*pend2,*negro,*circle,*circle2;
+    QGraphicsEllipseItem *pend,*pend2,*negro,*negro2,*circle,*circle2;
     QString name,name2;
     QPen pen;
     double x1_pend=200,x2_pend=0, y1_pend=0, y2_pend=0, radio1_pend=45, radio2_pend=45, magnitud;
@@ -90,7 +92,7 @@ private:
     QMessageBox message;
     float dt; float x,y,alto,ancho,te,i,rad;float acum=0,acum2=0;
     int h_limit,tm,bandera=0,multijugador=0,difficulty=10;
-    int v_limit, cronometro=TT, cronometro2=TT, level=0;
+    int v_limit, cronometro=TT, cronometro2=TT, level=0,contmon=0;
     bool bandP1=false, bandP2=false;
     void keyPressEvent(QKeyEvent *event);
     void borderCollision(mete *b);
