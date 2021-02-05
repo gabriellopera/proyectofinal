@@ -78,6 +78,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lcdNumber_3->hide();
     ui->pushButton_14->hide();
     ui->horizontalSlider->hide();
+    ui->textBrowser->hide();
+    ui->pushButton_15->hide();
 }
 
 MainWindow::~MainWindow() //Destructor para eliminar escena y los timer
@@ -121,18 +123,18 @@ void MainWindow::crono2() //Función para llevar control del tiempo de Player2 y
 }
 
 void MainWindow::borderCollision(mete *b) //Condiciones de impacto para player1
-{   int z=5;QBrush brush4(Qt::red);//Propiedades de la Elipse
+{   QBrush brush4(Qt::red);//Propiedades de la Elipse
     if(b->getPX()<b->getR()){ //Condicion para no sobrepasar el eje X negativo
-        b->set_vel(-1*(0+(rand()%z))*b->getVX(),b->getVY(),b->getR(),b->getPY());//Se cambia la dirección y se le asigna un coeficiente de restitución aleatorio
+        b->set_vel(-1*(0+(rand()%4))*b->getVX(),b->getVY(),b->getR(),b->getPY());//Se cambia la dirección y se le asigna un coeficiente de restitución aleatorio
     }
     if(b->getPX()>h_limit-b->getR()){ //Condicion para no sobrepasar el eje X positivo
-        b->set_vel(-1*(0+(rand()%z))*b->getVX(),b->getVY(),h_limit-b->getR(),b->getPY());
+        b->set_vel(-1*(0+(rand()%4))*b->getVX(),b->getVY(),h_limit-b->getR(),b->getPY());
     }
     if(b->getPY()<b->getR()){ //Condicion para no sobrepasar el eje Y positivo
-        b->set_vel(b->getVX(),-1*(0+(rand()%z))*b->getVY(),b->getPX(),b->getR());
+        b->set_vel(b->getVX(),-1*(0+(rand()%4))*b->getVY(),b->getPX(),b->getR());
     }
     if(b->getPY()>v_limit-b->getR()){//Condicion para no sobrepasar el eje Y negativo
-        b->set_vel(b->getVX(),-1*(0+(rand()%z))*b->getVY(),b->getPX(),v_limit-b->getR());
+        b->set_vel(b->getVX(),-1*(0+(rand()%4))*b->getVY(),b->getPX(),v_limit-b->getR());
     }
 
     if(posicionX>h_limit-190){ //Condición para límites del circulo senoidal
@@ -236,12 +238,12 @@ void MainWindow::borderCollision(mete *b) //Condiciones de impacto para player1
                 scene->setBackgroundBrush(QBrush(QImage(":/images/universo4.jpg"))); //Cambiamos fondo de pantalla
                 for(int i=0;i<muro.size();i++) //Remover todos los muros
                 {
-                    scene->removeItem(muro.at(i));
+                    scene->removeItem(muro.at(i)); //si hay colisiones, elimina el objeto de la lista
                     muro.removeAt(i);
                 }
                 for(int i=0;i<muro.size();i++) //Remover todos los muros
                 {
-                    scene->removeItem(muro.at(i));
+                    scene->removeItem(muro.at(i)); //si hay colisiones, elimina el objeto de la lista
                     muro.removeAt(i);
                 }
                 muro.append(new muros(20,170,-70,-60)); //luego los volvemos agregar pero con uno adicional y en diferente posición
@@ -250,7 +252,7 @@ void MainWindow::borderCollision(mete *b) //Condiciones de impacto para player1
                 muro.append(new muros(20,170,-600,-120));
                 muro.append(new muros(220,20,-460,-390));
                 muro.append(new muros(220,20,-200,-240));
-                for(auto it=muro.begin();it!=muro.end();it++)
+                for(auto it=muro.begin();it!=muro.end();it++) //ciclo para añadir cada elemento de la lista a la escena
                 {
                     scene->addItem(*it);
                 }
@@ -259,8 +261,8 @@ void MainWindow::borderCollision(mete *b) //Condiciones de impacto para player1
                 timer3->start(1000);
                 delete negro;
                 QBrush brush2(Qt::black);
-                negro2 = scene->addEllipse(10,10,40,40,pen,brush2);
-                negro = scene->addEllipse(10,400,40,40,pen,brush2);
+                negro2 = scene->addEllipse(10,10,40,40,pen,brush2); //se crea objeto con variables iniciales
+                negro = scene->addEllipse(10,400,40,40,pen,brush2); //se crea objeto2 con variables iniciales
             }
             if(level==3){
                 message.setText("FELICITACIONES, LOGRASTE ESCAPAR DE LAS GALAXIA!!");//finaliza partida
@@ -308,66 +310,66 @@ void MainWindow::borderCollision(mete *b) //Condiciones de impacto para player1
 }
 
 void MainWindow::borderCollision2(mete *b, mete *c) //Función para condiciones de colisión en caso de multiplayer, semejantes a las anteriores
-{   int z=5;QBrush brush4(Qt::red);
+{   QBrush brush4(Qt::red);
     //player1
     if(multijugador==1){
-    if(b->getPX()<b->getR()){ //Condiciones de impacto player1
-        b->set_vel(-1*(0+(rand()%z))*b->getVX(),b->getVY(),b->getR(),b->getPY());
-    }
-    if(b->getPX()>h_limit-b->getR()){
-        b->set_vel(-1*(0+(rand()%z))*b->getVX(),b->getVY(),h_limit-b->getR(),b->getPY());
-    }
-    if(b->getPY()<b->getR()){
-        b->set_vel(b->getVX(),-1*(0+(rand()%z))*b->getVY(),b->getPX(),b->getR());
-    }
-    if(b->getPY()>v_limit-b->getR()){
-        b->set_vel(b->getVX(),-1*(0+(rand()%z))*b->getVY(),b->getPX(),v_limit-b->getR());
-    }
+//    if(b->getPX()<b->getR()){ //Condiciones de impacto player1 eje x izquierdo
+//        b->set_vel(-1*(0+(rand()%4))*b->getVX(),b->getVY(),b->getR(),b->getPY());
+//    }
+//    if(b->getPX()>h_limit-b->getR()){ //Condiciones de impacto player1 eje x derecho
+//        b->set_vel(-1*(0+(rand()%4))*b->getVX(),b->getVY(),h_limit-b->getR(),b->getPY());
+//    }
+//    if(b->getPY()<b->getR()){ //Condiciones de impacto player1 eje y superior
+//        b->set_vel(b->getVX(),-1*(0+(rand()%4))*b->getVY(),b->getPX(),b->getR());
+//    }
+//    if(b->getPY()>v_limit-b->getR()){ //Condiciones de impacto player1 eje y inferior
+//        b->set_vel(b->getVX(),-1*(0+(rand()%4))*b->getVY(),b->getPX(),v_limit-b->getR());
+//    }
     //player2
-    if(c->getPX()<c->getR()){ //Condiciones de impacto player2
-            c->set_vel(-1*(0+(rand()%z))*c->getVX(),c->getVY(),c->getR(),c->getPY());
+    if(c->getPX()<c->getR()){ //Condiciones de impacto player2 eje x izquierdo
+            c->set_vel(-1*(0+(rand()%4))*c->getVX(),c->getVY(),c->getR(),c->getPY());
     }
-    if(c->getPX()>h_limit-c->getR()){
-        c->set_vel(-1*(0+(rand()%z))*c->getVX(),c->getVY(),h_limit-c->getR(),c->getPY());
+    if(c->getPX()>h_limit-c->getR()){ //Condiciones de impacto player2 eje x derecho
+        c->set_vel(-1*(0+(rand()%4))*c->getVX(),c->getVY(),h_limit-c->getR(),c->getPY());
     }
-    if(c->getPY()<c->getR()){
-        c->set_vel(c->getVX(),-1*(0+(rand()%z))*c->getVY(),c->getPX(),c->getR());
+    if(c->getPY()<c->getR()){ //Condiciones de impacto player2 eje y superior
+        c->set_vel(c->getVX(),-1*(0+(rand()%4))*c->getVY(),c->getPX(),c->getR());
     }
-    if(c->getPY()>v_limit-c->getR()){
-        c->set_vel(c->getVX(),-1*(0+(rand()%z))*c->getVY(),c->getPX(),v_limit-c->getR());
+    if(c->getPY()>v_limit-c->getR()){ //Condiciones de impacto player2 eje y inferior
+        c->set_vel(c->getVX(),-1*(0+(rand()%4))*c->getVY(),c->getPX(),v_limit-c->getR());
     }
 
-    if(posicionX>h_limit-190){
-        velocidadX=7;
-    }
-    if(posicionX<-150){
-        velocidadX=-7;
-    }
-    if(posicion2X>h_limit-190){
+//    if(posicionX>h_limit-190){ //cambio de direccion para los circulos rojos
+//        velocidadX=7;
+//    }
+//    if(posicionX<-150){ //cambio de direccion para los circulos rojos
+//        velocidadX=-7;
+//    }
+    if(posicion2X>h_limit-190){ //cambio de direccion para los circulos rojos
         velocidad2X=(7+(rand()%12));
     }
-    if(posicion2X<-150){
+    if(posicion2X<-150){ //cambio de direccion para los circulos rojos
         velocidad2X=-(5+(rand()%11));
     }
-    if(player1->collidesWithItem(pend)){
-        b->set_vel(0,0,800,-10);
-    }
-    if(player1->collidesWithItem(pend2)){
-        b->set_vel(0,0,800,-10);
-    }
-    if(player1->collidesWithItem(circle)){
-        b->set_vel(0,0,800,-10);
-    }
-    if(player2->collidesWithItem(pend)){
+//    if(player1->collidesWithItem(pend)){ //condicional en caso de impacto retornar a la posición inicial
+//        b->set_vel(0,0,800,-10);
+//    }
+//    if(player1->collidesWithItem(pend2)){ //condicional en caso de impacto retornar a la posición inicial
+//        b->set_vel(0,0,800,-10);
+//    }
+//    if(player1->collidesWithItem(circle)){ //condicional en caso de impacto retornar a la posición inicial
+//        b->set_vel(0,0,800,-10);
+//    }
+    if(player2->collidesWithItem(pend)){ //condicional en caso de impacto retornar a la posición inicial
         c->set_vel(0,0,800,-10);
     }
-    if(player2->collidesWithItem(pend2)){
+    if(player2->collidesWithItem(pend2)){ //condicional en caso de impacto retornar a la posición inicial
         c->set_vel(0,0,800,-10);
     }
-    if(player2->collidesWithItem(circle)){
+    if(player2->collidesWithItem(circle)){ //condicional en caso de impacto retornar a la posición inicial
         c->set_vel(0,0,800,-10);
     }
-    if(bandera==2){
+    if(bandera==2){ //si bandera de activa, esta en el segundo nivel por lo cual se inicia el condicional para el segundo circulo rojo
         if(player1->collidesWithItem(circle2)){
         b->set_vel(0,0,800,-10);
         }
@@ -375,32 +377,32 @@ void MainWindow::borderCollision2(mete *b, mete *c) //Función para condiciones 
         c->set_vel(0,0,800,-10);
         }
     }
-    if(bandera==3){
-        for(auto it=muro.begin();it!=muro.end();it++)
-        {
-            if(player1->collidesWithItem(*it)){
-                b->set_vel(0,0,800,-10);
-            }
-        }
-        for(auto it=muro.begin();it!=muro.end();it++)
-        {
-            if(player2->collidesWithItem(*it)){
-                c->set_vel(0,0,800,-10);
-            }
-        }
-    }
+//    if(bandera==3){ //si bandera de activa, esta en el segundo nivel por lo cual se inicia el condicional para el segundo circulo rojo
+//        for(auto it=muro.begin();it!=muro.end();it++)
+//        {
+//            if(player1->collidesWithItem(*it)){
+//                b->set_vel(0,0,800,-10);
+//            }
+//        }
+//        for(auto it=muro.begin();it!=muro.end();it++)
+//        {
+//            if(player2->collidesWithItem(*it)){
+//                c->set_vel(0,0,800,-10);
+//            }
+//        }
+//    }
 
-    for(auto it=muro.begin();it!=muro.end();it++)
+//    for(auto it=muro.begin();it!=muro.end();it++)
+//    {
+
+//        if(player1->collidesWithItem(*it)){
+//            b->set_vel(-1*b->getVX(),-1*b->getVY(),b->getPX(),b->getPY());
+//        }
+//    }
+    for(auto it2=muro.begin();it2!=muro.end();it2++)
     {
 
-        if(player1->collidesWithItem(*it)){
-            b->set_vel(-1*b->getVX(),-1*b->getVY(),b->getPX(),b->getPY());
-        }
-    }
-    for(auto it=muro.begin();it!=muro.end();it++)
-    {
-
-        if(player2->collidesWithItem(*it)){
+        if(player2->collidesWithItem(*it2)){
             c->set_vel(-1*c->getVX(),-1*c->getVY(),c->getPX(),c->getPY());
         }
     }
@@ -425,55 +427,9 @@ void MainWindow::borderCollision2(mete *b, mete *c) //Función para condiciones 
         }
     }
 
-//    if(multijugador==0){
-//        if(player1->collidesWithItem(negro)){
-//            level+=1;
-//            b->set_vel(-1*b->getVX(),-1*b->getVY(),800,400);
-//            timer->stop();
-//            timer2->stop();
-//            timer3->stop();
-//            if(level==1){
-//                message.setText("PASASTE A LA SEGUNDA GALAXIA!!");
-//                message.setInformativeText("");
-//                message.exec();
-//                bandera=2;
-//                circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
-//                timer->start(15);
-//                timer2->start(difficulty-1);
-//                timer3->start(1000);
-//            }
-//            if(level==2){
-//                message.setText("PASASTE A LA TERCERA GALAXIA!!");
-//                message.setInformativeText("");
-//                message.exec();
-//                bandera+=1;
-//                for(int i=0;i<muro.size();i++)
-//                {
-//                    scene->removeItem(muro.at(i));
-//                    muro.removeAt(i);
-//                }
-//                muro.append(new muros(20,170,-70,-60));
-//                muro.append(new muros(220,20,-180,-60));
-//                muro.append(new muros(220,20,-70,-340));
-//                muro.append(new muros(20,170,-600,-120));
-//                muro.append(new muros(220,20,-460,-390));
-//                muro.append(new muros(220,20,-200,-240));
-//                for(auto it=muro.begin();it!=muro.end();it++)
-//                {
-//                    scene->addItem(*it);
-//                }
-//                timer->start(15);
-//                timer2->start(difficulty-2);
-//                timer3->start(1000);
-//            }
-//            if(level==3){
-//                message.setText("FELICITACIONES, LOGRASTE ESCAPAR DE LAS GALAXIA!!");
-//                message.setInformativeText("");
-//                message.exec();
 
-//            }
-//        }
-//    }
+
+
 
     if(multijugador==1){ //Condicional en caso de alcanzar el agujero negro para player1
         if(player1->collidesWithItem(negro) || player1->collidesWithItem(negro2)){
@@ -497,8 +453,29 @@ void MainWindow::borderCollision2(mete *b, mete *c) //Función para condiciones 
                     message.setInformativeText("");
                     message.exec();
                     bandera=2;
+                    b->set_vel(0,0,800,-10);
+                    c->set_vel(0,0,800,-10);
                     scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));
                     circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
+                    for(int i=0;i<muro.size();i++) //Remover todos los muros
+                    {
+                        scene->removeItem(muro.at(i)); //si hay colisiones, elimina el objeto de la lista
+                        muro.removeAt(i);
+                    }
+                    for(int i=0;i<muro.size();i++) //Remover todos los muros
+                    {
+                        scene->removeItem(muro.at(i)); //si hay colisiones, elimina el objeto de la lista
+                        muro.removeAt(i);
+                    }
+                    muro.append(new muros(60,60,-470,-180)); //luego los volvemos agregar pero con uno adicional y en diferente posición
+                    muro.append(new muros(60,60,-120,-280));
+                    muro.append(new muros(60,60,-290,-340));
+                    muro.append(new muros(60,60,-290,-50));
+
+                    for(auto it=muro.begin();it!=muro.end();it++) //ciclo para añadir cada elemento de la lista a la escena
+                    {
+                        scene->addItem(*it);
+                    }
                     timer->start(15);
                     timer2->start(difficulty-2);
                     timer3->start(1000);
@@ -632,7 +609,7 @@ void MainWindow::on_pushButton_clicked() //start
             muro.append(new muros(220,20,-460,-390));
             for(auto it=muro.begin();it!=muro.end();it++) //Ciclo para añadir cada uno de los muros a la escena
             {
-                scene->addItem(*it);
+                scene->addItem(*it); //Ciclo para añadir cada uno de los muros a la escena
             }
             player1 = new meteor(1); //Se crea nuestro personaje
             scene->addItem(player1); //Se agrega nuestro personaje a la escena
@@ -689,10 +666,10 @@ void MainWindow::on_pushButton_clicked() //start
             muro.append(new muros(220,20,-460,-390));
             for(auto it=muro.begin();it!=muro.end();it++) //Ciclo para añadir cada uno de los muros a la escena
             {
-                scene->addItem(*it);
+                scene->addItem(*it); //Ciclo para añadir cada uno de los muros a la escena
             }
 
-            connect(timer,SIGNAL(timeout()),this,SLOT(actualizar())); //Se inicializan todos los timers
+            connect(timer,SIGNAL(timeout()),this,SLOT(actualizar())); //Se inicializan todos los timers conectandolos con las funciones
             connect(timerP2,SIGNAL(timeout()),this,SLOT(actualizar2()));
             connect(timerCron2,SIGNAL(timeout()),this,SLOT(crono2()));
             connect(timer2,SIGNAL(timeout()),this,SLOT(pendulo()));
@@ -759,6 +736,47 @@ void MainWindow::on_pushButton_3_clicked() //save
     }
     if(multijugador==1){
         mete * c = player2->getEsf();
+        string Nnames, posx, posy,cron,galaxy,difil,banderr; //Creamos String para guardar los datos leídos del archivo de texto
+        string Nnames2, posx2, posy2,cron2;
+
+        ifstream Leer; //Variable para leer archivos de entrada
+        ofstream Temp, Guardar; //Varibles para manejar archivos de salida
+        Guardar.open("guardar2.txt",ios::app);
+        Leer.open("guardar2.txt");
+        Temp.open("temp.txt");
+
+        bool encontrado=false;
+        Leer>>Nnames;
+        while(!Leer.eof()){ //Leemos la primera linea de texto
+            Leer>>Nnames2;
+            Leer>>posx;
+            Leer>>posy;
+            Leer>>cron;
+            Leer>>galaxy;
+            Leer>>difil;
+            Leer>>banderr;
+            Leer>>posx2;
+            Leer>>posy2;
+            Leer>>cron2;
+            if(Nnames==(name.toStdString()) || Nnames2==name2.toStdString()){ //Si el usuario encontrado es igual al registrado, procede a tomar los nuevos datos
+                encontrado=true;
+                Temp<<Nnames<<"    "<<Nnames2<<"    "<<b->getPX()<<"    "<<b->getPY()<<"    "<<cronometro<<"    "<<level+1<<"    "<<difficulty<<"    "<<bandera<<"    "<<c->getPX()<<"    "<<c->getPY()<<"    "<<cronometro2<<endl;
+            }
+            else{ //En caso de que no, guardar los datos actuales
+                Temp<<Nnames<<"    "<<Nnames2<<"    "<<posx<<"    "<<posy<<"    "<<cron<<"    "<<galaxy<<"    "<<difil<<"    "<<banderr<<"    "<<posx2<<"    "<<posy2<<"    "<<cron2<<endl;
+            }
+            Leer>>Nnames;
+        }
+        if(!encontrado){ //Si el booleano es false, no hay registros guardados, por lo cual agrega el usuario nuevo con sus datos0.
+            Temp<<name.toStdString()<<"    "<<name2.toStdString()<<"    "<<b->getPX()<<"    "<<b->getPY()<<"    "<<cronometro<<"    "<<level+1<<"    "<<difficulty<<"    "<<bandera<<"    "<<c->getPX()<<"    "<<c->getPY()<<"    "<<cronometro2<<endl;
+        }
+        Leer.close();
+        Temp.close();
+        Guardar.close();
+
+        remove("guardar2.txt");
+        rename("temp.txt","guardar2.txt");
+
     }
 }
 
@@ -1045,7 +1063,284 @@ void MainWindow::on_pushButton_4_clicked() //load
 
 
     if(multijugador==1){
+        string Nnames, posx, posy,cron,galaxy,difil,banderr; //Creamos String para guardar los datos leídos del archivo de texto
+        string Nnames2, posx2, posy2,cron2;
 
+        ifstream Leer; //Para manipular el archivo en modo lectura
+        ofstream Guardar;
+        Guardar.open("guardar2.txt",ios::app);
+        Leer.open("guardar2.txt");
+
+        mete *c=player2->getEsf();
+        bool encontrado=false;
+        Leer>>Nnames;
+        while(!Leer.eof()){ //Si e nombre coincide, guardamos todos los datos en cada variable
+            Leer>>Nnames2;
+            Leer>>posx;
+            Leer>>posy;
+            Leer>>cron;
+            Leer>>galaxy;
+            Leer>>difil;
+            Leer>>banderr;
+            Leer>>posx2;
+            Leer>>posy2;
+            Leer>>cron2;
+            if(Nnames==(name.toStdString()) && Nnames2==(name2.toStdString())){
+                encontrado=true;
+                c->set_vel(0,0,stof(posx2),stof(posy2)); //player2 le damos su posicion
+                cronometro2=stoi(cron2); //Asignamos el tiempo
+                if((level+1)==1){
+                    if(stoi(galaxy)==1){ //Asignamos cada una de las variables al objeto y a la configuración de la partida
+                        b->set_vel(0,0,stof(posx),stof(posy)); //player1 le damos su posicion
+                        cronometro=stoi(cron); //Asignamos el tiempo
+                        difficulty=stoi(difil); //Asignamos dificultad
+                        level=stoi(galaxy)-1; //Asignamos nivel
+                        bandera=stoi(banderr);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name+name2);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                    if(stoi(galaxy)==2){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        timer2->start(difficulty-1);
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        muro.append(new muros(60,60,-470,-180)); //luego los volvemos agregar pero con uno adicional y en diferente posición
+                        muro.append(new muros(60,60,-120,-280));
+                        muro.append(new muros(60,60,-290,-340));
+                        muro.append(new muros(60,60,-290,-50));
+                        for(auto it=muro.begin();it!=muro.end();it++)
+                        {
+                            scene->addItem(*it);
+                        }
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));
+                        circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name+name2);
+                        message.setInformativeText("");
+                        message.exec();
+
+                    }
+                    if(stoi(galaxy)==3){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        timer2->start(difficulty-2);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo4.jpg")));
+                        circle2 = scene->addEllipse(posicion2X,posicion2Y+250,40,40,pen,brush4);
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        muro.append(new muros(20,170,-70,-60));
+                        muro.append(new muros(220,20,-180,-60));
+                        muro.append(new muros(220,20,-70,-340));
+                        muro.append(new muros(20,170,-600,-120));
+                        muro.append(new muros(220,20,-460,-390));
+                        muro.append(new muros(220,20,-200,-240));
+                        for(auto it=muro.begin();it!=muro.end();it++)
+                        {
+                            scene->addItem(*it);
+                        }
+                        QBrush brush2(Qt::black);
+                        negro2 = scene->addEllipse(10,10,40,40,pen,brush2);
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name+name2);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                }
+                else if((level+1)==2){
+                    if(stoi(galaxy)==1){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
+                        delete circle2;
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name+name2);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                    if(stoi(galaxy)==2){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        muro.append(new muros(60,60,-470,-180)); //luego los volvemos agregar pero con uno adicional y en diferente posición
+                        muro.append(new muros(60,60,-120,-280));
+                        muro.append(new muros(60,60,-290,-340));
+                        muro.append(new muros(60,60,-290,-50));
+                        for(auto it=muro.begin();it!=muro.end();it++)
+                        {
+                            scene->addItem(*it);
+                        }
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));
+                        timer2->start(difficulty-1);
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name+name2);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                    if(stoi(galaxy)==3){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo4.jpg")));
+                        timer2->start(difficulty-2);
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        muro.append(new muros(20,170,-70,-60));
+                        muro.append(new muros(220,20,-180,-60));
+                        muro.append(new muros(220,20,-70,-340));
+                        muro.append(new muros(20,170,-600,-120));
+                        muro.append(new muros(220,20,-460,-390));
+                        muro.append(new muros(220,20,-200,-240));
+                        for(auto it=muro.begin();it!=muro.end();it++)
+                        {
+                            scene->addItem(*it);
+                        }
+                        QBrush brush2(Qt::black);
+                        negro2 = scene->addEllipse(10,10,40,40,pen,brush2);
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name+name2);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+
+                }
+                else{
+                    if(stoi(galaxy)==1){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo2.jpg")));
+                        delete circle2;
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        muro.append(new muros(20,170,-70,-60));
+                        muro.append(new muros(220,20,-180,-60));
+                        muro.append(new muros(220,20,-70,-340));
+                        muro.append(new muros(20,170,-600,-120));
+                        muro.append(new muros(220,20,-460,-390));
+                        for(auto it=muro.begin();it!=muro.end();it++)
+                        {
+                            scene->addItem(*it);
+                        }
+                        QBrush brush2(Qt::black);
+                        negro2 = scene->addEllipse(10,10,40,40,pen,brush2);
+                        negro = scene->addEllipse(10,10,40,40,pen,brush2);
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name+name2);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                    if(stoi(galaxy)==2){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo3.jpg")));
+                        timer2->start(difficulty-1);
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        for(int i=0;i<muro.size();i++)
+                        {
+                            scene->removeItem(muro.at(i));
+                            muro.removeAt(i);
+                        }
+                        muro.append(new muros(60,60,-470,-180)); //luego los volvemos agregar pero con uno adicional y en diferente posición
+                        muro.append(new muros(60,60,-120,-280));
+                        muro.append(new muros(60,60,-290,-340));
+                        muro.append(new muros(60,60,-290,-50));
+                        for(auto it=muro.begin();it!=muro.end();it++)
+                        {
+                            scene->addItem(*it);
+                        }
+                        scene->removeItem(negro2);
+
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name+name2);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                    if(stoi(galaxy)==3){
+                        b->set_vel(0,0,stof(posx),stof(posy));
+                        cronometro=stoi(cron);
+                        difficulty=stoi(difil);
+                        level=stoi(galaxy)-1;
+                        bandera=stoi(banderr);
+                        QBrush brush2(Qt::black);
+                        negro2 = scene->addEllipse(10,10,40,40,pen,brush2);
+                        scene->setBackgroundBrush(QBrush(QImage(":/images/universo4.jpg")));
+                        timer2->start(difficulty-2);
+                        message.setText("PAARTIDA CARGADA CORRECTAMENTE CON USUARIO "+name+name2);
+                        message.setInformativeText("");
+                        message.exec();
+                    }
+                }
+            }
+            Leer>>Nnames;
+        }
+        if(!encontrado){
+            message.setText("NO SE TIENE PARTIDA GUARDADA CON EL PLAYER1 "+name+" Y PLAYER2 "+name2);
+            message.setInformativeText("");
+            message.exec();
+        }
+        Leer.close();
+
+        Guardar.close();
 
     }
 }
@@ -1080,9 +1375,11 @@ void MainWindow::on_pushButton_7_clicked() //stop
     ui->pushButton_6->show();
 }
 
-void MainWindow::on_pushButton_8_clicked()
+void MainWindow::on_pushButton_8_clicked() //instructions
 {
-
+    ui->textBrowser->show();
+    ui->pushButton_15->show();
+    ui->textBrowser_4->show();
 }
 
 void MainWindow::on_pushButton_9_clicked() //multiplayer
@@ -1279,3 +1576,10 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
 }
 
 
+
+void MainWindow::on_pushButton_15_clicked() // x
+{
+    ui->textBrowser->hide();
+    ui->pushButton_15->hide();
+    ui->textBrowser_4->hide();
+}

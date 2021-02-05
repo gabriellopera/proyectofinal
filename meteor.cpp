@@ -12,7 +12,7 @@ meteor::meteor(int x):escala(0.8)
     velx = 0;
     vely = 0;
     K = 0.2;
-    e = 0+(rand()%3); //Coeficiente de restitución varia, de esta forma se hace el juego dinámico
+    e = (0+(rand()%4)); //Coeficiente de restitución varia, de esta forma se hace el juego dinámico
     esf = new mete(posx,posy,velx,vely,mass,r,K,e); //Se crea el objeto
 
 

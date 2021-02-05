@@ -80,6 +80,8 @@ private slots:
 
 
 
+    void on_pushButton_15_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer *timer, *timer2, *timer3, *timerP2, *timerCron2;
